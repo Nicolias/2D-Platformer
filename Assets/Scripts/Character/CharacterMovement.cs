@@ -1,55 +1,56 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(CharacterController))]
 public class CharacterMovement : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
 
-    [SerializeField] private float _jampDuration;
-    [SerializeField] private float _jumpForce;
+    [SerializeField] private float _jumpDuration;
+    [SerializeField] private float _haight;
+    private float _startJumpVelocity;
 
-    private Rigidbody2D _rigidbody;
+    private float _gravityForce;
+    private Vector2 _velocity = Vector2.zero;
 
-    private float _yVelocity = 0;
-    private bool _isJumping;
+    private CharacterController _characterController;
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();
+        _characterController = GetComponent<CharacterController>();
+        float maxHeightTime = _jumpDuration / 2;
+        _gravityForce = (2 * _haight) / Mathf.Pow(maxHeightTime, 2);
+        _startJumpVelocity = (2 * _haight) / maxHeightTime;
     }
 
     private void Update()
     {
-        float xVelocity = Input.GetAxis("Horizontal");
+        GravityHandling();
 
-        if (Input.GetKeyDown(KeyCode.Space) && _isJumping == false)
-            StartCoroutine(Jump());
+        Jump();
 
-        _rigidbody.velocity = new Vector2(xVelocity, _yVelocity) * Time.deltaTime * _moveSpeed;
+        Move();
     }
 
-    private IEnumerator Jump()
+    private void GravityHandling()
     {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
-        float timePasted = 0;
+        if (_characterController.isGrounded == false)
+            _velocity.y -= _gravityForce * Time.fixedDeltaTime;
+        else
+            _velocity.y = -1f;
+    }
 
-        float gravityScale = _rigidbody.gravityScale;
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _characterController.isGrounded)
+            _velocity.y = _startJumpVelocity;
+    }
 
-        _isJumping = true;
-        _rigidbody.gravityScale = 0;
+    private void Move()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
 
-        _yVelocity = _jumpForce * Time.deltaTime;
-
-        while ( timePasted < _jampDuration)
-        {
-            yield return waitForSeconds;
-            timePasted += 0.01f;
-        }
-
-        _yVelocity = 0;
-        _rigidbody.gravityScale = gravityScale;
-
-        _isJumping = false;
+        _velocity.x = horizontal * _moveSpeed;
+        _characterController.Move(_velocity * Time.fixedDeltaTime);
     }
 }
