@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour, IMovement
 {
     [SerializeField] private List<Transform> _pathPointsList;
-    [SerializeField] private float _moveTime;
+    [SerializeField] private float _speed;
 
     private Queue<Transform> _pathPoints;
 
     private Transform _transform;
+
+    public float Direction { get; private set; }
+    public float Speed => _speed;
 
     private void Awake()
     {
@@ -27,7 +30,12 @@ public class EnemyMovement : MonoBehaviour
 
             while (_transform.position.x != currentPathPoint.position.x)
             {
-                _transform.position = new Vector2(Mathf.MoveTowards(_transform.position.x, currentPathPoint.position.x, _moveTime * Time.deltaTime), 0);
+                if (_transform.position.x > currentPathPoint.position.x)
+                    Direction = -1;
+                else if (_transform.position.x < currentPathPoint.position.x)
+                    Direction = 1;
+
+                _transform.position = new Vector2(Mathf.MoveTowards(_transform.position.x, currentPathPoint.position.x, _speed * Time.deltaTime), 0);
                 yield return null;
             }
 

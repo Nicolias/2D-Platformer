@@ -1,13 +1,10 @@
 using System.Collections;
 using UnityEngine;
-[RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(CharacterController))]
-public class CharacterMovement : MonoBehaviour
-{
-    private SpriteRenderer _spriteRenderer;
-    private Animator _animator;
+using UnityEngine.Events;
 
+[RequireComponent(typeof(CharacterController))]
+public class CharacterMovement : MonoBehaviour, IMovement
+{
     [SerializeField] private float _moveSpeed;
 
     [SerializeField] private float _jumpDuration;
@@ -19,12 +16,14 @@ public class CharacterMovement : MonoBehaviour
 
     private CharacterController _characterController;
 
+    public float Direction => _velocity.x;
+
+    public float Speed => Mathf.Abs(_velocity.x);
+
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _animator = GetComponent<Animator>();
-
+        
         float maxHeightTime = _jumpDuration / 2;
         _gravityForce = (2 * _haight) / Mathf.Pow(maxHeightTime, 2);
         _startJumpVelocity = (2 * _haight) / maxHeightTime;
@@ -59,13 +58,5 @@ public class CharacterMovement : MonoBehaviour
 
         _velocity.x = horizontal * _moveSpeed;
         _characterController.Move(_velocity * Time.fixedDeltaTime);
-
-        if (horizontal > 0)
-            _spriteRenderer.flipX = false;
-
-        if (horizontal < 0)
-            _spriteRenderer.flipX = true;
-
-        _animator.SetFloat("Speed", Mathf.Abs(_velocity.x));
     }
 }
