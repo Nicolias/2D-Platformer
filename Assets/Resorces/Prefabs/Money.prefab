@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6455594957477018754}
   - component: {fileID: 5411138189201614433}
   - component: {fileID: 1412614178037514113}
-  - component: {fileID: 4919553605489377207}
   - component: {fileID: 3718493640078321798}
+  - component: {fileID: 2705459158514473339}
   m_Layer: 8
   m_Name: Money
   m_TagString: Untagged
@@ -132,18 +132,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4919553605489377207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2679109021286121792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffcfa7751905361419d7ea535cf43ca2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &3718493640078321798
 Animator:
   serializedVersion: 5
@@ -165,6 +153,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2705459158514473339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679109021286121792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443e16bb2a807c040a1a5cb7a6bf875c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4526405451710803161
 GameObject:
   m_ObjectHideFlags: 0

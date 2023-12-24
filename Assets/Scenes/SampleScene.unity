@@ -1738,7 +1738,7 @@ GameObject:
   - component: {fileID: 1236984269}
   - component: {fileID: 1236984268}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Score Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3578,7 +3578,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2068800017}
-  - component: {fileID: 2068800016}
+  - component: {fileID: 2068800018}
   m_Layer: 0
   m_Name: Entery Point
   m_TagString: Untagged
@@ -3586,24 +3586,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2068800016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068800015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f9b97e7e6b47234f93c9f10127d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemies:
-  - {fileID: 1169864933}
-  - {fileID: 1339948751}
-  _player: {fileID: 196129411}
-  _moneyCollectedText: {fileID: 1236984268}
-  _restartGameButton: {fileID: 1468273386}
 --- !u!4 &2068800017
 Transform:
   m_ObjectHideFlags: 0
@@ -3619,6 +3601,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2068800018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068800015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc51cbaedc84ab140bf07c3d09c29ce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies:
+  - {fileID: 1169864933}
+  - {fileID: 1339948751}
+  _player: {fileID: 196129411}
+  _moneyCollectedText: {fileID: 1236984268}
+  _restartGameButton: {fileID: 1468273386}
 --- !u!4 &2083105000 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3180615038029312022, guid: 82ebe5120f6323f4eaa93df98e44c31e, type: 3}
