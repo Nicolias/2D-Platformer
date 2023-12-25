@@ -1,34 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Animator))]
 public class MoveAnimation : MonoBehaviour
 {
-    [SerializeField] private MonoBehaviour _movement;
-
-    private SpriteRenderer _spriteRenderer;
+    private IMovement _movement;
     private Animator _animator;
 
-    private IMovement _iMovement => (IMovement) _movement;
-
-    private void OnValidate()
+    public void Initialize(IMovement movement)
     {
-        if (_movement is IMovement)
-            return;
-
-        Debug.LogError(_movement.name + " needs to implement " + nameof(IMovement));
-        _movement = null;
+        _movement = movement;
     }
 
     private void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        Set(_iMovement.Direction, _iMovement.Speed);
+        Set(_movement.Direction, _movement.Speed);
     }
 
     private void Set(float direction, float speed)
@@ -42,5 +34,10 @@ public class MoveAnimation : MonoBehaviour
             transform.rotation = new Quaternion(0, halfTurnValue, 0, 0);
 
         _animator.SetFloat(AnimatorData.Params.Speed, speed);
+    }
+
+    internal void Initialize(object currentMovement)
+    {
+        throw new NotImplementedException();
     }
 }

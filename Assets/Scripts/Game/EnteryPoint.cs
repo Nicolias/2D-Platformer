@@ -1,3 +1,4 @@
+using Enemy;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,26 +7,31 @@ using UnityEngine.UI;
 
 public class EnteryPoint : MonoBehaviour
 {
-    [SerializeField] private List<EnemyDetector> _enemies;
-    [SerializeField] private Player _player;
+    [SerializeField] private List<Enemy.Enemy> _enemies;
+    [SerializeField] private Character _character;
 
     [SerializeField] private TMP_Text _moneyCollectedText;
     [SerializeField] private Button _restartGameButton;
 
     private Wallet _wallet = new Wallet();
 
-    private void OnEnable()
+    private void Awake()
     {
         Time.timeScale = 1;
 
-        _enemies.ForEach(enemy => enemy.PlayerDetected += GameOver);
-        _player.MoneyCollector.Collected += OnWalletChanged;
+        _enemies.ForEach(enemy =>
+        {
+            enemy.Initialize(_character);
+            enemy.Detector.PlayerDetected += GameOver;
+        });
+
+        _character.MoneyCollector.Collected += OnWalletChanged;
     }
     
-    private void OnDisable()
+    private void OnDestroy()
     {
-        _enemies.ForEach(enemy => enemy.PlayerDetected -= GameOver);
-        _player.MoneyCollector.Collected -= OnWalletChanged;
+        _enemies.ForEach(enemy => enemy.Detector.PlayerDetected -= GameOver);
+        _character.MoneyCollector.Collected -= OnWalletChanged;
     }
 
     private void OnWalletChanged()
@@ -36,11 +42,11 @@ public class EnteryPoint : MonoBehaviour
 
     private void GameOver()
     {
-        Time.timeScale = 0;
-        _player.Movement.enabled = false;
+        //Time.timeScale = 0;
+        //_player.Movement.enabled = false;
 
-        _restartGameButton.gameObject.SetActive(true);
-        _restartGameButton.onClick.AddListener(RestartGame);
+        //_restartGameButton.gameObject.SetActive(true);
+        //_restartGameButton.onClick.AddListener(RestartGame);
     }
 
     private void RestartGame()
