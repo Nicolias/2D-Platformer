@@ -7,24 +7,21 @@ public class CharacterMovement : MonoBehaviour, IMovement
 
     [SerializeField] private float _jumpDuration;
     [SerializeField] private float _haight;
-    private float _startJumpVelocity;
-
-    private float _gravityForce;
-    private Vector2 _velocity = Vector2.zero;
 
     private CharacterController _characterController;
 
-    public float Direction => _velocity.x;
+    private float _gravityForce;
+    private float _startJumpVelocity;
+    private Vector2 _velocity = Vector2.zero;
 
+    public float Direction => _velocity.x;
     public float Speed => Mathf.Abs(_velocity.x);
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
-        
-        float maxHeightTime = _jumpDuration / 2;
-        _gravityForce = (2 * _haight) / Mathf.Pow(maxHeightTime, 2);
-        _startJumpVelocity = (2 * _haight) / maxHeightTime;
+
+        CalculatePhysicalParameters();
     }
 
     private void Update()
@@ -36,12 +33,23 @@ public class CharacterMovement : MonoBehaviour, IMovement
         Move();
     }
 
+    private void CalculatePhysicalParameters()
+    {
+        float jumpDurationFactor = 2.0f;
+
+        float maxHeightTime = _jumpDuration / jumpDurationFactor;
+        _gravityForce = (jumpDurationFactor * _haight) / (maxHeightTime * maxHeightTime);
+        _startJumpVelocity = (jumpDurationFactor * _haight) / maxHeightTime;
+    }
+
     private void GravityHandling()
     {
+        float slightAttractionValue = -1f;
+
         if (_characterController.isGrounded == false)
             _velocity.y -= _gravityForce * Time.fixedDeltaTime;
         else
-            _velocity.y = -1f;
+            _velocity.y = slightAttractionValue;
     }
 
     private void Jump()
@@ -52,7 +60,7 @@ public class CharacterMovement : MonoBehaviour, IMovement
 
     private void Move()
     {
-        float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxis(InputConst.Horizontal);
 
         _velocity.x = horizontal * _moveSpeed;
         _characterController.Move(_velocity * Time.fixedDeltaTime);
