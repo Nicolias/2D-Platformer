@@ -24,6 +24,9 @@ public class EnemyMovement : MonoBehaviour, IMovement
 
     private IEnumerator Move()
     {
+        int left = -1;
+        int right = 1;
+
         while (enabled)
         {
             Transform currentPathPoint = _pathPoints.Dequeue();
@@ -31,9 +34,9 @@ public class EnemyMovement : MonoBehaviour, IMovement
             while (_transform.position.x != currentPathPoint.position.x)
             {
                 if (_transform.position.x > currentPathPoint.position.x)
-                    Direction = -1;
+                    Direction = left;
                 else if (_transform.position.x < currentPathPoint.position.x)
-                    Direction = 1;
+                    Direction = right;
 
                 _transform.position = new Vector2(Mathf.MoveTowards(_transform.position.x, currentPathPoint.position.x, _speed * Time.deltaTime), 0);
                 yield return null;

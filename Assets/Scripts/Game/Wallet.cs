@@ -2,14 +2,12 @@
 
 public class Wallet
 {
-    private readonly int _pointPerOneMoney = 1;
+    private readonly int _pointPerOneCoin = 1;
 
-    private int _score = 0;
-
-    public int Score => _score;
+    public int Score { get; private set; }
 
     public void AddCoin()
     {
-        _score += _pointPerOneMoney;
+        Score += _pointPerOneCoin;
     }
 }

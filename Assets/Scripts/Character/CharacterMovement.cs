@@ -28,7 +28,8 @@ public class CharacterMovement : MonoBehaviour, IMovement
     {
         GravityHandling();
 
-        Jump();
+        if (Input.GetKeyDown(KeyCode.Space) && _characterController.isGrounded)
+            Jump();
 
         Move();
     }
@@ -53,9 +54,8 @@ public class CharacterMovement : MonoBehaviour, IMovement
     }
 
     private void Jump()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && _characterController.isGrounded)
-            _velocity.y = _startJumpVelocity;
+    {        
+        _velocity.y = _startJumpVelocity;
     }
 
     private void Move()

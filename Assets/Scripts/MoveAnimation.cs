@@ -28,10 +28,11 @@ public class MoveAnimation : MonoBehaviour
 
     private void Update()
     {
-        Set(_iMovement.Direction, _iMovement.Speed);
+        SetRotation(_iMovement.Direction);
+        _animator.SetFloat(AnimatorData.Params.Speed, _iMovement.Speed);
     }
 
-    private void Set(float direction, float speed)
+    private void SetRotation(float direction)
     {
         int halfTurnValue = 180;
 
@@ -40,7 +41,5 @@ public class MoveAnimation : MonoBehaviour
 
         if (direction < 0)
             transform.rotation = new Quaternion(0, halfTurnValue, 0, 0);
-
-        _animator.SetFloat(AnimatorData.Params.Speed, speed);
     }
 }
