@@ -6,7 +6,8 @@ namespace Enemy
     public class Enemy : MonoBehaviour
     {
         [SerializeField] private Detector _detector;
-        [SerializeField] private MovmentStateMachine _movementStateMachine;
+        [SerializeField] private StateMachine _movementStateMachine;
+        [SerializeField] private Movement _movement;
 
         private MoveAnimation _moveAnimation;
 
@@ -16,41 +17,9 @@ namespace Enemy
         {
             _moveAnimation = GetComponent<MoveAnimation>();
 
-            _movementStateMachine.Initialize(character);
-            _moveAnimation.Initialize(_movementStateMachine.CurrentMovement);
-        }
-
-        private void OnEnable()
-        {
-            _detector.PlayerDetected += OnPlayerDetected;
-            _detector.PlayerLost += OnPlayerLost;
-
-            _movementStateMachine.MovementChanged += OnMovementChanged;
-        }
-
-        private void OnDisable()
-        {
-            _detector.PlayerDetected -= OnPlayerDetected;
-            _detector.PlayerLost -= OnPlayerLost;
-
-            _movementStateMachine.MovementChanged += OnMovementChanged;
-        }
-
-        private void OnPlayerDetected()
-        {
-            _movementStateMachine.ChangeState<FollowState>();
-            OnMovementChanged();
-        }
-
-        private void OnPlayerLost()
-        {
-            _movementStateMachine.ChangeState<PatrollingState>();
-            OnMovementChanged();
-        }
-
-        private void OnMovementChanged()
-        {
-            _moveAnimation.Initialize(_movementStateMachine.CurrentMovement);
+            _movement.Initialize(transform);
+            _movementStateMachine.Initialize(character, _movement, _detector);
+            _moveAnimation.Initialize(_movement);
         }
     }
 }

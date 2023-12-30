@@ -92,11 +92,11 @@ GameObject:
   - component: {fileID: 7423847663337919203}
   - component: {fileID: 5288364384392255364}
   - component: {fileID: 3733432919810306880}
-  - component: {fileID: 2139031945802665636}
-  - component: {fileID: 3860916264052435401}
   - component: {fileID: 8507841236919912322}
   - component: {fileID: 3335648742303515480}
   - component: {fileID: 7540694124900588367}
+  - component: {fileID: 7368975474765429539}
+  - component: {fileID: 8849943866334002281}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -186,6 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _detector: {fileID: 3884306235254920755}
   _movementStateMachine: {fileID: 3733432919810306880}
+  _movement: {fileID: 7368975474765429539}
 --- !u!114 &3733432919810306880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,40 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1893b3d931156ac488b8845ae95f221f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2139031945802665636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6892621396844697846}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b72d46034dedfb4b8184bad8f3c408d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _pathPointsList:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _speed: 0.5
---- !u!114 &3860916264052435401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6892621396844697846}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab35c232981b8543ac38245ab005e30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveSpeed: 0.5
-  _jumpDuration: 2
-  _haight: 4
-  _maxFollowDistacne: 1
-  _minDistanceForJump: 1
+  _patrollPath: {fileID: 0}
+  _maxAttackDistance: 3
+  _minAttackDistance: 1
+  _maxFollowDistance: 7
 --- !u!114 &8507841236919912322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,3 +262,30 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: -0.59, y: 0.03, z: 0}
+--- !u!114 &7368975474765429539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6892621396844697846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ad544d7b41c9a4083cd2eaf0fd088a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8849943866334002281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6892621396844697846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b3cc638217ce64289b815c40428ccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 0.5
+  _jumpDuration: 2
+  _jumpHaight: 4

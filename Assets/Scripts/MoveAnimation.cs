@@ -20,7 +20,8 @@ public class MoveAnimation : MonoBehaviour
 
     private void Update()
     {
-        Set(_movement.Direction, _movement.Speed);
+        if (_movement != null)
+            Set(_movement.Direction, _movement.Speed);
     }
 
     private void Set(float direction, float speed)

@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(MoveAnimation))]
 public class Character : MonoBehaviour
 {
-    [field: SerializeField] public MoneyCollector MoneyCollector { get; private set; }
-    [field: SerializeField] public AbstractPhisicsMovement Movement { get; private set; }
+    [SerializeField] private MoveAnimation _moveAnimation;
 
-    private MoveAnimation _moveAnimation;
+    [field: SerializeField] public MoneyCollector MoneyCollector { get; private set; }
+    [field: SerializeField] public JumpMovementFacade Movement { get; private set; }
 
     private void Awake()
     {
-        _moveAnimation = GetComponent<MoveAnimation>();
-
         _moveAnimation.Initialize(Movement);   
     }
 }

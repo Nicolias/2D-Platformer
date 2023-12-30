@@ -2,7 +2,7 @@
 
 public class Wallet
 {
-    private readonly int _pointPerOneMoney = 1;
+    private readonly int _pointPerOneCoin = 1;
 
     private int _score = 0;
 
@@ -10,6 +10,6 @@ public class Wallet
 
     public void AddCoin()
     {
-        _score += _pointPerOneMoney;
+        _score += _pointPerOneCoin;
     }
 }

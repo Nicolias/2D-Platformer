@@ -7,11 +7,11 @@ namespace Enemy
     public class Detector : MonoBehaviour
     {
         public event UnityAction PlayerDetected;
-        public event UnityAction PlayerLost;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            PlayerDetected?.Invoke();
+            if (collision.TryGetComponent(out MoneyCollector character))
+                PlayerDetected?.Invoke();
         }
     }
 }

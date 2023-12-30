@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 
-public class CharacterMovement : AbstractPhisicsMovement
+[RequireComponent(typeof(JumpMovementFacade))]
+public class CharacterMovement : MonoBehaviour
 {
-    protected override event UnityAction Jumping;
+    private JumpMovementFacade _movement;
 
-    protected override float GetHorizontalDirection()
+    private void Awake()
     {
-        return Input.GetAxis(InputConst.Horizontal);
+        _movement = GetComponent<JumpMovementFacade>();
     }
 
-    protected override void Updating()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
-            Jumping?.Invoke();
+        if (Input.GetKeyDown(KeyCode.Space))
+            _movement.TryJump();
+
+        _movement.Move(Input.GetAxis(InputConst.Horizontal), Time.deltaTime);
     }
 }
