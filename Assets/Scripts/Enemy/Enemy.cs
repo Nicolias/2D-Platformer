@@ -44,16 +44,19 @@ namespace Enemy
             _movementStateMachine.Initialize(this, character, updateServise);
         }
 
-        public void TeleportToStartPoint()
+        public void TeleportToStartPoint(bool isNeedShowAnimaton = true)
         {
-            StartCoroutine(Teleport());
+            StartCoroutine(Teleport(isNeedShowAnimaton));
         }
 
-        private IEnumerator Teleport()
+        private IEnumerator Teleport(bool isNeedShowAnimaton)
         {
-            MoveAnimation.PlayTeleportAnimation();
+            if(isNeedShowAnimaton)
+            {
+                MoveAnimation.PlayTeleportAnimation();
+                yield return new WaitForSeconds(1f);
+            }
 
-            yield return new WaitForSeconds(1f);
             _patrollPath.Reset();
             Movement.Respawn(_patrollPath.GetNextPathPoint().position);
             _movementStateMachine.ChangeState<PatrolleState>();

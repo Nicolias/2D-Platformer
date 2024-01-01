@@ -1,14 +1,12 @@
 ﻿using CharacterSystem;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using UnityEngine;
 
 namespace Enemy
 {    public class StateMachine : MonoBehaviour, IUpdateable
     {
-        [SerializeField] private float _maxAttackDistance;
-        [SerializeField] private float _minAttackDistance;
+        [SerializeField] private float _attackDistance;
         [SerializeField] private float _maxFollowDistance;
         
         private List<BaseState> _states = new List<BaseState>();
@@ -19,10 +17,10 @@ namespace Enemy
             updateServise.AddToUpdate(this);
             _states.Add(new RespawnState(this, enemy.Movement, enemy));
             _states.Add(new PatrolleState(enemy.PatrollPath, enemy.Detector, this, enemy.Movement));
-            _states.Add(new FollowState(character.transform, _maxFollowDistance, _minAttackDistance, this, enemy.Movement));
-            _states.Add(new AttackState(_maxAttackDistance, character, enemy, this, enemy.Movement));
+            _states.Add(new FollowState(character.transform, _maxFollowDistance, _attackDistance, this, enemy.Movement));
+            _states.Add(new AttackState(_attackDistance, character, enemy, this, enemy.Movement));
 
-            ChangeState<RespawnState>();
+            enemy.TeleportToStartPoint(false);
         }
 
         void IUpdateable.Update(float timeBetweenFrame)
@@ -125,14 +123,14 @@ namespace Enemy
         private readonly Transform _player;
 
         private readonly float _maxFollowDistance;
-        private readonly float _minAttackDistance;
+        private readonly float _attackDistance;
 
-        public FollowState(Transform player, float maxFollowDistance, float minAttackDistance, StateMachine stateMachine, Movement movement) : base(stateMachine, movement)
+        public FollowState(Transform player, float maxFollowDistance, float attackDistance, StateMachine stateMachine, Movement movement) : base(stateMachine, movement)
         {
             _player = player;
 
             _maxFollowDistance = maxFollowDistance;
-            _minAttackDistance = minAttackDistance;
+            _attackDistance = attackDistance;
         }
 
         public override void Enter()
@@ -151,7 +149,7 @@ namespace Enemy
 
             if (distanceByTarget > _maxFollowDistance)
                 StateMachine.ChangeState<RespawnState>();
-            else if (distanceByTarget < _minAttackDistance)
+            else if (distanceByTarget <= _attackDistance)
                 StateMachine.ChangeState<AttackState>();
         }
     }
