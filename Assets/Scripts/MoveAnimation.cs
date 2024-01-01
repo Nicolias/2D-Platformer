@@ -1,44 +1,44 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(Animator))]
-public class MoveAnimation : MonoBehaviour
+public class MoveAnimation : IUpdateable
 {
-    private IMovement _movement;
-    private Animator _animator;
+    private readonly IMovement _movement;
+    private readonly Animator _animator;
+    private readonly Transform _selfTransform;
 
-    public void Initialize(IMovement movement)
+    public MoveAnimation(IMovement movement, Animator animator, Transform transform, UpdateServise updateServise)
     {
         _movement = movement;
+        _animator = animator;
+        _selfTransform = transform;
+
+        updateServise.AddToUpdate(this);
     }
 
-    private void Start()
-    {
-        _animator = GetComponent<Animator>();
-    }
-
-    private void Update()
+    void IUpdateable.Update(float timeBetweenFrame)
     {
         if (_movement != null)
-            Set(_movement.Direction, _movement.Speed);
+        {
+            Debug.Log(_movement.Speed);
+
+            Rotate(_movement.Direction);
+            _animator.SetFloat(AnimatorData.Params.Speed, _movement.Speed); 
+        }
     }
 
-    private void Set(float direction, float speed)
+    public void PlayTeleportAnimation()
+    {
+        _animator.SetTrigger(AnimatorData.Params.Teleport);
+    }
+
+    private void Rotate(float direction)
     {
         int halfTurnValue = 180;
 
         if (direction > 0)
-            transform.rotation = new Quaternion(0, 0, 0, 0);
+            _selfTransform.rotation = new Quaternion(0, 0, 0, 0);
 
         if (direction < 0)
-            transform.rotation = new Quaternion(0, halfTurnValue, 0, 0);
-
-        _animator.SetFloat(AnimatorData.Params.Speed, speed);
-    }
-
-    internal void Initialize(object currentMovement)
-    {
-        throw new NotImplementedException();
+            _selfTransform.rotation = new Quaternion(0, halfTurnValue, 0, 0);
     }
 }

@@ -1,4 +1,4 @@
-using Enemy;
+using CharacterSystem;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,6 +9,7 @@ public class EnteryPoint : MonoBehaviour
 {
     [SerializeField] private List<Enemy.Enemy> _enemies;
     [SerializeField] private Character _character;
+    [SerializeField] private UpdateServise _updateServise;
 
     [SerializeField] private TMP_Text _moneyCollectedText;
     [SerializeField] private Button _restartGameButton;
@@ -19,9 +20,11 @@ public class EnteryPoint : MonoBehaviour
     {
         Time.timeScale = 1;
 
+        _character.Initialize(_updateServise);
+
         _enemies.ForEach(enemy =>
         {
-            enemy.Initialize(_character);
+            enemy.Initialize(_character, _updateServise);
             enemy.Detector.PlayerDetected += GameOver;
         });
 

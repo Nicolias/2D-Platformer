@@ -7,10 +7,16 @@ namespace Enemy
     {
         [SerializeField] private List<Transform> _patrollPathList;
 
-        private Queue<Transform> _pathPoints;
+        private Queue<Transform> _pathPoints = new Queue<Transform>();
 
         private void Awake()
         {
+            Reset();
+        }
+
+        public void Reset()
+        {
+            _pathPoints.Clear();
             _pathPoints = new Queue<Transform>(_patrollPathList);
         }
 

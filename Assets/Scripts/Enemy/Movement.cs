@@ -2,33 +2,35 @@
 
 namespace Enemy
 {
-    [RequireComponent(typeof(JumpMovementFacade))]
-    public class Movement : MonoBehaviour, IMovement
+    public class Movement : IMovement, IUpdateable
     {
-        private JumpMovementFacade _movement;
-        private Transform _enemyTransform;
+        private readonly JumpMovementFacade _movement;
+        private readonly Transform _enemyTransform;
 
         private Transform _currentTargetTransform;
+
+        public Movement(Transform enemyTransform, JumpMovementFacade jumpMovementFacade, UpdateServise updateServise)
+        {
+            _enemyTransform = enemyTransform;
+            _movement = jumpMovementFacade;
+
+            updateServise.AddToFixedUpdate(this);
+        }
 
         public float Direction => _movement.Direction;
         public float Speed => _movement.Speed;
 
-        private void Awake()
-        {
-            _movement = GetComponent<JumpMovementFacade>();
-        }
-
-        public void Initialize(Transform enemyTransform)
-        {
-            _enemyTransform = enemyTransform;
-        }
-
-        private void FixedUpdate()
+        void IUpdateable.Update(float timeBetweenFrame)
         {
             if (_currentTargetTransform != null)
-                _movement.Move(_currentTargetTransform.position.x - _enemyTransform.position.x, Time.fixedDeltaTime);
+                _movement.Move(_currentTargetTransform.position.x - _enemyTransform.position.x, timeBetweenFrame);
             else
                 _movement.Move(0, 0);
+        }
+
+        public void Respawn(Vector2 respawnPoint)
+        {
+            _movement.Teleport(respawnPoint);
         }
 
         public void Follow(Transform target)

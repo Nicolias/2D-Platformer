@@ -1,14 +1,24 @@
 ﻿using UnityEngine;
 
-public class Character : MonoBehaviour
+namespace CharacterSystem
 {
-    [SerializeField] private MoveAnimation _moveAnimation;
-
-    [field: SerializeField] public MoneyCollector MoneyCollector { get; private set; }
-    [field: SerializeField] public JumpMovementFacade Movement { get; private set; }
-
-    private void Awake()
+    [RequireComponent(typeof(Animator))]
+    public class Character : MonoBehaviour
     {
-        _moveAnimation.Initialize(Movement);   
+        [SerializeField] private JumpMovementFacade _movement;
+
+        [SerializeField] private int _health;
+
+        [field: SerializeField] public MoneyCollector MoneyCollector { get; private set; }
+
+        public Health Health { get; private set; }
+
+        public void Initialize(UpdateServise updateServise)
+        {
+            new Imput(_movement, updateServise);
+            new MoveAnimation(_movement, GetComponent<Animator>(), transform, updateServise);
+
+            Health = new Health(_health);
+        }
     }
 }

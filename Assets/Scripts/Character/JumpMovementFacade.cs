@@ -8,18 +8,20 @@ public class JumpMovementFacade : MonoBehaviour, IMovement
     [SerializeField] private float _jumpDuration;
     [SerializeField] private float _jumpHaight;
 
+    private CharacterController _characterController;
+
     private Velocity _velocity;
     private PhisicsMovement _phisicsMovement;
     private Jumper _jumper;
 
     private void Awake()
     {
-        CharacterController characterController = GetComponent<CharacterController>();
+        _characterController = GetComponent<CharacterController>();
 
         _velocity = new Velocity();
 
-        _phisicsMovement = new PhisicsMovement(_velocity, characterController, _moveSpeed);
-        _jumper = new Jumper(_velocity, characterController, _jumpDuration, _jumpHaight);
+        _phisicsMovement = new PhisicsMovement(_velocity, _characterController, _moveSpeed);
+        _jumper = new Jumper(_velocity, _characterController, _jumpDuration, _jumpHaight);
     }
 
     public float Direction => _velocity.X;
@@ -38,6 +40,13 @@ public class JumpMovementFacade : MonoBehaviour, IMovement
     public void Move(float direction, float frameDeltaTime)
     {
         _phisicsMovement.Move(DirectionConst.GetDirectionNormolized(direction), frameDeltaTime);
+    }
+
+    public void Teleport(Vector2 position)
+    {
+        _characterController.enabled = false;
+        _characterController.transform.position = position;
+        _characterController.enabled = true;
     }
 
     private class PhisicsMovement

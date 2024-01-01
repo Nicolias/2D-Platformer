@@ -1,4 +1,4 @@
 ﻿public interface IUpdateable
 {
-    public void Update();
+    public void Update(float timeBetweenFrame);
 }

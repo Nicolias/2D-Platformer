@@ -1,33 +1,34 @@
-﻿using System;
+﻿using CharacterSystem;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 namespace Enemy
-{    public class StateMachine : MonoBehaviour
+{    public class StateMachine : MonoBehaviour, IUpdateable
     {
-        [SerializeField] private PatrollPath _patrollPath;
-
         [SerializeField] private float _maxAttackDistance;
         [SerializeField] private float _minAttackDistance;
         [SerializeField] private float _maxFollowDistance;
-
+        
         private List<BaseState> _states = new List<BaseState>();
         private BaseState _currentState;
 
-        public void Initialize(Character character, Movement movement, Detector detector)
+        public void Initialize(Enemy enemy, Character character, UpdateServise updateServise)
         {
-            _states.Add(new PatrolleState(_patrollPath, detector, this, movement));
-            _states.Add(new FollowState(character.transform, _maxFollowDistance, _minAttackDistance, this, movement));
-            _states.Add(new AttackState(_maxAttackDistance, character.transform, this, movement));
+            updateServise.AddToUpdate(this);
+            _states.Add(new RespawnState(this, enemy.Movement, enemy));
+            _states.Add(new PatrolleState(enemy.PatrollPath, enemy.Detector, this, enemy.Movement));
+            _states.Add(new FollowState(character.transform, _maxFollowDistance, _minAttackDistance, this, enemy.Movement));
+            _states.Add(new AttackState(_maxAttackDistance, character, enemy, this, enemy.Movement));
 
-            ChangeState<PatrolleState>();
+            ChangeState<RespawnState>();
         }
 
-        private void Update()
+        void IUpdateable.Update(float timeBetweenFrame)
         {
             if (_currentState != null)
-                _currentState.Update();
+                _currentState.Update(timeBetweenFrame);
         }
 
         public void ChangeState<T>() where T : BaseState
@@ -58,7 +59,30 @@ namespace Enemy
 
         public abstract void Exit();
 
-        public abstract void Update();
+        public abstract void Update(float timeBetweenFrame);
+    }
+
+    public class RespawnState : BaseState
+    {
+        private readonly Enemy _enemy;
+
+        public RespawnState(StateMachine stateMachine, Movement movement, Enemy enemy) : base(stateMachine, movement)
+        {
+            _enemy = enemy;
+        }
+
+        public override void Enter()
+        {
+            _enemy.TeleportToStartPoint();
+        }
+
+        public override void Exit()
+        {
+        }
+
+        public override void Update(float timeBetweenFrame)
+        {
+        }
     }
 
     public class PatrolleState : BaseState
@@ -84,7 +108,7 @@ namespace Enemy
             _detector.PlayerDetected -= OnPlayerDetected;
         }
 
-        public override void Update()
+        public override void Update(float timeBetweenFrame)
         {
             if (Movement.GetDistanceByTarget() < 0.1)
                 Movement.Follow(_patrollPath.GetNextPathPoint());
@@ -121,12 +145,12 @@ namespace Enemy
             Movement.StopFollowing();
         }
 
-        public override void Update()
+        public override void Update(float timeBetweenFrame)
         {
             float distanceByTarget = Movement.GetDistanceByTarget();
 
             if (distanceByTarget > _maxFollowDistance)
-                StateMachine.ChangeState<PatrolleState>();
+                StateMachine.ChangeState<RespawnState>();
             else if (distanceByTarget < _minAttackDistance)
                 StateMachine.ChangeState<AttackState>();
         }
@@ -134,36 +158,33 @@ namespace Enemy
 
     public class AttackState : BaseState
     {
-        private readonly Transform _player;
+        private readonly Character _player;
+        private readonly Enemy _enemy;
         private float _maxAttackDistance;
 
-        public AttackState(float maxAttackDistance, Transform player, StateMachine stateMachine, Movement movement) : base(stateMachine, movement)
+        public AttackState(float maxAttackDistance, Character player, Enemy enemy, StateMachine stateMachine, Movement movement) : base(stateMachine, movement)
         {
             _player = player;
             _maxAttackDistance = maxAttackDistance;
+            _enemy = enemy;
         }
 
         public override void Enter()
         {
+            _enemy.Attacker.StartAttack(_player.Health);
         }
 
         public override void Exit()
         {
+            _enemy.Attacker.StopAttack();
         }
 
-        public override void Update()
+        public override void Update(float timeBetweenFrame)
         {
-            float distanceByTarget = DirectionConst.GetDistance(Movement.transform.position.x, _player.position.x);
+            float distanceByTarget = DirectionConst.GetDistance(_enemy.transform.position.x, _player.transform.position.x);
 
             if (distanceByTarget > _maxAttackDistance)
                 StateMachine.ChangeState<FollowState>();
-            else
-                Attack();
-        }
-
-        private void Attack()
-        {
-            Debug.Log("Attack");
         }
     }
 }
