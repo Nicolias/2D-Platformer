@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movement: {fileID: 196129414}
-  _health: 100
+  _startHealthValue: 15
   <MoneyCollector>k__BackingField: {fileID: 698595798}
 --- !u!114 &196129414
 MonoBehaviour:

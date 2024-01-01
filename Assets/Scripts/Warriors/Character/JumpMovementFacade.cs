@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class JumpMovementFacade : MonoBehaviour, IMovement
+public class JumpMovementFacade : MonoBehaviour, IMovement, IUpdateable
 {
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _jumpDuration;
@@ -14,9 +14,13 @@ public class JumpMovementFacade : MonoBehaviour, IMovement
     private PhisicsMovement _phisicsMovement;
     private Jumper _jumper;
 
-    private void Awake()
+    public float Direction => _velocity.X;
+    public float Speed => Mathf.Abs(_velocity.X);
+
+    public void Initialize(UpdateServise updateServise)
     {
         _characterController = GetComponent<CharacterController>();
+        updateServise.AddToFixedUpdate(this);
 
         _velocity = new Velocity();
 
@@ -24,12 +28,9 @@ public class JumpMovementFacade : MonoBehaviour, IMovement
         _jumper = new Jumper(_velocity, _characterController, _jumpDuration, _jumpHaight);
     }
 
-    public float Direction => _velocity.X;
-    public float Speed => Mathf.Abs(_velocity.X);
-
-    private void FixedUpdate()
+    void IUpdateable.Update(float timeBetweenFrame)
     {
-        _jumper.GravityHandling(Time.fixedDeltaTime);
+        _jumper.GravityHandling(timeBetweenFrame);
     }
 
     public void TryJump()

@@ -18,23 +18,19 @@ public class EnteryPoint : MonoBehaviour
 
     private void Awake()
     {
-        Time.timeScale = 1;
-
         _character.Initialize(_updateServise);
-
-        _enemies.ForEach(enemy =>
-        {
-            enemy.Initialize(_character, _updateServise);
-            enemy.Detector.PlayerDetected += GameOver;
-        });
-
         _character.MoneyCollector.Collected += OnWalletChanged;
+        _character.Dead += GameOver;
+
+        _enemies.ForEach(enemy => enemy.Initialize(_character, _updateServise));
+
+        Time.timeScale = 1;
     }
     
     private void OnDestroy()
     {
-        _enemies.ForEach(enemy => enemy.Detector.PlayerDetected -= GameOver);
         _character.MoneyCollector.Collected -= OnWalletChanged;
+        _character.Dead -= GameOver;
     }
 
     private void OnWalletChanged()
@@ -45,11 +41,10 @@ public class EnteryPoint : MonoBehaviour
 
     private void GameOver()
     {
-        //Time.timeScale = 0;
-        //_player.Movement.enabled = false;
+        Time.timeScale = 0;
 
-        //_restartGameButton.gameObject.SetActive(true);
-        //_restartGameButton.onClick.AddListener(RestartGame);
+        _restartGameButton.gameObject.SetActive(true);
+        _restartGameButton.onClick.AddListener(RestartGame);
     }
 
     private void RestartGame()

@@ -2,9 +2,9 @@
 
 namespace CharacterSystem
 {
-    public class Imput
+    public class Input
     {
-        public Imput(JumpMovementFacade jumpMovementFacade, UpdateServise updateServise)
+        public Input(JumpMovementFacade jumpMovementFacade, UpdateServise updateServise)
         {
             updateServise.AddToFixedUpdate(new MovementInput(jumpMovementFacade));
             updateServise.AddToUpdate(new JumpInput(jumpMovementFacade));
@@ -21,7 +21,7 @@ namespace CharacterSystem
 
             public void Update(float timeBetweenFrame)
             {
-                _movement.Move(Input.GetAxis(InputConst.Horizontal), timeBetweenFrame);
+                _movement.Move(UnityEngine.Input.GetAxis(InputConst.Horizontal), timeBetweenFrame);
             }
         }
 
@@ -36,7 +36,7 @@ namespace CharacterSystem
 
             public void Update(float timeBetweenFrame)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
                     _movement.TryJump();
             }
         }

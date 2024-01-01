@@ -1,5 +1,4 @@
 ﻿using CharacterSystem;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -19,8 +18,6 @@ namespace Enemy
 
         [SerializeField] private int _health;
 
-        private UpdateServise _updateServise;
-
         public Attacker Attacker { get; private set; }
         public Health Health { get; private set; }
         public Movement Movement { get; private set; }
@@ -33,7 +30,6 @@ namespace Enemy
         {
             JumpMovementFacade jumpMovementFacade = GetComponent<JumpMovementFacade>();
             Animator animator = GetComponent<Animator>();
-            _updateServise = updateServise;
             Transform selfTransform = transform;
 
             Attacker = new Attacker(_damage, _attackCoolDown, animator, updateServise);
@@ -41,6 +37,7 @@ namespace Enemy
             Movement = new Movement(selfTransform, jumpMovementFacade, updateServise);
             MoveAnimation = new MoveAnimation(Movement, animator, selfTransform, updateServise);
 
+            jumpMovementFacade.Initialize(updateServise);
             _movementStateMachine.Initialize(this, character, updateServise);
         }
 
@@ -61,78 +58,5 @@ namespace Enemy
             Movement.Respawn(_patrollPath.GetNextPathPoint().position);
             _movementStateMachine.ChangeState<PatrolleState>();
         }
-    }
-}
-
-public class Attacker : IUpdateable
-{
-    private readonly int _damage;
-    private readonly float _attackCooldown;
-    private readonly UpdateServise _updateServise;
-    private readonly Animator _selfAnimator;
-
-    private float _nextAttackTime;
-    private Health _damageable;
-
-    public Attacker(int damage, float attackCooldown, Animator selfAnimator, UpdateServise updateServise)
-    {
-        _damage = damage;
-        _attackCooldown = attackCooldown;
-        _updateServise = updateServise;
-
-        _selfAnimator = selfAnimator;
-    }
-
-    void IUpdateable.Update(float timeBetweenFrame)
-    {
-        if (_nextAttackTime <= Time.time)
-            Attack();
-    }
-
-    public void StartAttack(Health health)
-    {
-        _damageable = health;
-
-        Attack();
-        _updateServise.AddToUpdate(this);
-    }
-
-    public void StopAttack()
-    {
-        _damageable = null;
-        _updateServise.RemoveFromUpdate(this);
-    }
-
-    private void Attack()
-    {
-        _damageable.TakeDamage(_damage);
-        _nextAttackTime = Time.time + _attackCooldown;
-
-        _selfAnimator.SetTrigger(AnimatorData.Params.Attack);
-    }
-}
-
-public class Health
-{
-    private int _healthValue;
-
-    public Health(int healthValue)
-    {
-        _healthValue = healthValue;
-    }
-
-    public event Action Dead;
-
-    public void TakeDamage(int damage)
-    {
-        if (damage <= 0)
-            throw new InvalidOperationException();
-
-        _healthValue -= damage;
-
-        Debug.Log(_healthValue);
-
-        if (_healthValue < 0)
-            Dead?.Invoke();
     }
 }
