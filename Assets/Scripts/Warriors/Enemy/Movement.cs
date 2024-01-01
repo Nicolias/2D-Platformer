@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Enemy
 {
-    public class Movement : IMovement, IUpdateable
+    public class Movement : IMoveable, IUpdateable, IDisposable
     {
         private readonly JumpMovementFacade _movement;
         private readonly Transform _enemyTransform;
+
+        private readonly UpdateServise _updateServise;
 
         private Transform _currentTargetTransform;
 
@@ -14,11 +17,18 @@ namespace Enemy
             _enemyTransform = enemyTransform;
             _movement = jumpMovementFacade;
 
+            _updateServise = updateServise;
             updateServise.AddToFixedUpdate(this);
         }
 
         public float Direction => _movement.Direction;
         public float Speed => _movement.Speed;
+
+        public void Dispose()
+        {
+            _updateServise.RemoveFromFixedUpdate(this);
+            _movement.Dispose();
+        }
 
         void IUpdateable.Update(float timeBetweenFrame)
         {

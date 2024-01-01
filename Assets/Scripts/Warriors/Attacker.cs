@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Attacker : IUpdateable
 {
@@ -42,7 +43,10 @@ public class Attacker : IUpdateable
     private void Attack()
     {
         if (_damageable.Value == 0)
+        {
+            StopAttack();
             return;
+        }
 
         _damageable.TakeDamage(_damage);
         _nextAttackTime = Time.time + _attackCooldown;

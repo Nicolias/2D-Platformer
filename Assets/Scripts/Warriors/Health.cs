@@ -11,7 +11,7 @@ public class Health
 
     public int Value => _value;
 
-    public event Action Diying;
+    public event Action Dieing;
 
     public void TakeDamage(int damage)
     {
@@ -23,7 +23,7 @@ public class Health
         if (_value <= 0)
         {
             _value = 0;
-            Diying?.Invoke();
+            Dieing?.Invoke();
         }
     }
 }

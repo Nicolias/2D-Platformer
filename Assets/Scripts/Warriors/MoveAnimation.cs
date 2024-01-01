@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class MoveAnimation : IUpdateable, IDisposable
 {
-    private readonly IMovement _movement;
+    private readonly IMoveable _movement;
     private readonly Animator _animator;
     private readonly Transform _selfTransform;
     private readonly UpdateServise _updateServise;
 
-    public MoveAnimation(IMovement movement, Animator animator, Transform transform, UpdateServise updateServise)
+    public MoveAnimation(IMoveable movement, Animator animator, Transform transform, UpdateServise updateServise)
     {
         _movement = movement;
         _animator = animator;

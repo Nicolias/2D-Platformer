@@ -3,9 +3,9 @@
     public class PatrolleState : BaseState
     {
         private readonly PatrollPath _patrollPath;
-        private readonly Detector _detector;
+        private readonly AbstractDetector _detector;
 
-        public PatrolleState(PatrollPath patrollPath, Detector detector, StateMachine stateMachine, Movement movement) : base(stateMachine, movement)
+        public PatrolleState(PatrollPath patrollPath, AbstractDetector detector, StateMachine stateMachine, Movement movement) : base(stateMachine, movement)
         {
             _patrollPath = patrollPath;
             _detector = detector;
@@ -14,13 +14,13 @@
         public override void Enter()
         {
             Movement.Follow(_patrollPath.GetNextPathPoint());
-            _detector.PlayerDetected += OnPlayerDetected;
+            _detector.Detected += OnPlayerDetected;
         }
 
         public override void Exit()
         {
             Movement.StopFollowing();
-            _detector.PlayerDetected -= OnPlayerDetected;
+            _detector.Detected -= OnPlayerDetected;
         }
 
         public override void Update(float timeBetweenFrame)
@@ -29,7 +29,7 @@
                 Movement.Follow(_patrollPath.GetNextPathPoint());
         }
 
-        private void OnPlayerDetected()
+        private void OnPlayerDetected(Health health)
         {
             StateMachine.ChangeState<FollowState>();
         }

@@ -19,8 +19,8 @@ public class EnteryPoint : MonoBehaviour
     private void Awake()
     {
         _character.Initialize(_updateServise);
-        _character.MoneyCollector.Collected += OnWalletChanged;
-        _character.Dead += GameOver;
+        _character.CoinCollector.Collected += OnWalletChanged;
+        _character.Died += GameOver;
 
         _enemies.ForEach(enemy => enemy.Initialize(_character, _updateServise));
 
@@ -29,8 +29,8 @@ public class EnteryPoint : MonoBehaviour
     
     private void OnDestroy()
     {
-        _character.MoneyCollector.Collected -= OnWalletChanged;
-        _character.Dead -= GameOver;
+        _character.CoinCollector.Collected -= OnWalletChanged;
+        _character.Died -= GameOver;
     }
 
     private void OnWalletChanged()

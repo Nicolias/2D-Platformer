@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 
 [RequireComponent(typeof(CapsuleCollider2D))]
-public class MoneyCollector : MonoBehaviour
+public class CoinCollector : MonoBehaviour
 {
     public event UnityAction Collected;
 

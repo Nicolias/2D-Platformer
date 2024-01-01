@@ -2,13 +2,14 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class JumpMovementFacade : MonoBehaviour, IMovement, IUpdateable
+public class JumpMovementFacade : MonoBehaviour, IMoveable, IUpdateable, IDisposable
 {
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _jumpDuration;
     [SerializeField] private float _jumpHaight;
 
     private CharacterController _characterController;
+    private UpdateServise _updateServise;
 
     private Velocity _velocity;
     private PhisicsMovement _phisicsMovement;
@@ -20,12 +21,18 @@ public class JumpMovementFacade : MonoBehaviour, IMovement, IUpdateable
     public void Initialize(UpdateServise updateServise)
     {
         _characterController = GetComponent<CharacterController>();
+        _updateServise = updateServise;
         updateServise.AddToFixedUpdate(this);
 
         _velocity = new Velocity();
 
         _phisicsMovement = new PhisicsMovement(_velocity, _characterController, _moveSpeed);
         _jumper = new Jumper(_velocity, _characterController, _jumpDuration, _jumpHaight);
+    }
+
+    public void Dispose()
+    {
+        _updateServise.RemoveFromFixedUpdate(this);
     }
 
     void IUpdateable.Update(float timeBetweenFrame)

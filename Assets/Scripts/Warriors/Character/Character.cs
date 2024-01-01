@@ -1,49 +1,45 @@
-﻿using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace CharacterSystem
 {
     [RequireComponent(typeof(Animator))]
-    public class Character : MonoBehaviour
+    public class Character : MonoBehaviour, IDieable
     {
         [SerializeField] private JumpMovementFacade _movement;
-
-        [SerializeField] private int _startHealthValue;
+        [SerializeField] private Detector _detector;
 
         private MoveAnimation _moveAnimation;
 
-        [field: SerializeField] public MoneyCollector MoneyCollector { get; private set; }
+        [field: SerializeField] public CoinCollector CoinCollector { get; private set; }
+        [field: SerializeField] public AttackAndHealthFacade AttackAndHealth { get; private set; }
 
-        public Health Health { get; private set; }
+        public MoveAnimation MoveAnimation => _moveAnimation;
 
-        public event UnityAction Dead;
+        public event UnityAction Died;
 
         public void Initialize(UpdateServise updateServise)
         {
+            _detector.Detected += OnDetected;
+
             new Input(_movement, updateServise);
             _movement.Initialize(updateServise);
             _moveAnimation = new MoveAnimation(_movement, GetComponent<Animator>(), transform, updateServise);
 
-            Health = new Health(_startHealthValue);
-            Health.Diying += OnDiy;
+            AttackAndHealth.Initialize(updateServise, this);
         }
 
-        private void OnDiy()
+        void IDieable.Die()
         {
-            Health.Diying -= OnDiy;
-            StartCoroutine(ShowDeadAnimation());
-        }
+            _movement.Dispose();
 
-        private IEnumerator ShowDeadAnimation()
-        {
-            _moveAnimation.Animator.SetTrigger(AnimatorData.Params.Diy);
-            yield return new WaitForSeconds(1);
-
-            _moveAnimation.Dispose();
-            Dead?.Invoke();
+            Died?.Invoke();
             Destroy(gameObject);
+        }
+
+        private void OnDetected(Health health)
+        {
+            AttackAndHealth.Attacker.StartAttack(health);
         }
     }
 }

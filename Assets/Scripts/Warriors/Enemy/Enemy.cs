@@ -1,30 +1,28 @@
 ﻿using CharacterSystem;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Enemy
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(JumpMovementFacade))]
-    public class Enemy : MonoBehaviour
+    public class Enemy : MonoBehaviour, IDieable
     {
-        [SerializeField] private Detector _detector;
+        [SerializeField] private AbstractDetector _detector;
         [SerializeField] private StateMachine _movementStateMachine;
 
         [SerializeField] private PatrollPath _patrollPath;
 
-        [SerializeField] private int _damage;
-        [SerializeField] private int _attackCoolDown;
+        [field: SerializeField] public AttackAndHealthFacade AttackAndHealth { get; private set; }
 
-        [SerializeField] private int _health;
-
-        public Attacker Attacker { get; private set; }
-        public Health Health { get; private set; }
         public Movement Movement { get; private set; }
         public MoveAnimation MoveAnimation { get; private set; }
 
-        public Detector Detector => _detector;
+        public AbstractDetector Detector => _detector;
         public PatrollPath PatrollPath => _patrollPath;
+
+        public event UnityAction Died;
 
         public void Initialize(Character character, UpdateServise updateServise)
         {
@@ -32,13 +30,21 @@ namespace Enemy
             Animator animator = GetComponent<Animator>();
             Transform selfTransform = transform;
 
-            Attacker = new Attacker(_damage, _attackCoolDown, animator, updateServise);
-            Health = new Health(_health);
             Movement = new Movement(selfTransform, jumpMovementFacade, updateServise);
             MoveAnimation = new MoveAnimation(Movement, animator, selfTransform, updateServise);
 
             jumpMovementFacade.Initialize(updateServise);
+            AttackAndHealth.Initialize(updateServise, this);
             _movementStateMachine.Initialize(this, character, updateServise);
+        }
+
+        void IDieable.Die()
+        {
+            _movementStateMachine.Dispose();
+            Movement.Dispose();
+
+            Died?.Invoke();
+            Destroy(gameObject);
         }
 
         public void TeleportToStartPoint(bool isNeedShowAnimaton = true)

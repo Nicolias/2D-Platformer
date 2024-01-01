@@ -1,17 +1,19 @@
-﻿using UnityEngine;
+﻿using CharacterSystem;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(CapsuleCollider2D))]
-    public class Detector : MonoBehaviour
+    public class Detector : AbstractDetector
     {
-        public event UnityAction PlayerDetected;
+        public override event UnityAction<Health> Detected;
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        protected override void TryDetectHealth(Collider2D collision)
         {
-            if (collision.TryGetComponent(out MoneyCollector character))
-                PlayerDetected?.Invoke();
+            Character character = collision.GetComponentInParent<Character>();
+
+            if (character != null)
+                Detected?.Invoke(character.AttackAndHealth.Health);
         }
     }
 }

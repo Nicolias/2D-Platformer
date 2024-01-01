@@ -17,15 +17,15 @@ namespace Enemy
 
         public override void Enter()
         {
-            _enemy.Attacker.StartAttack(_player.Health);
-            _player.Dead += OnPlayerDead;
+            _enemy.AttackAndHealth.Attacker.StartAttack(_player.AttackAndHealth.Health);
+            _player.Died += OnPlayerDead;
         }
 
 
         public override void Exit()
         {
-            _enemy.Attacker.StopAttack();
-            _player.Dead -= OnPlayerDead;
+            _enemy.AttackAndHealth.Attacker.StopAttack();
+            _player.Died -= OnPlayerDead;
         }
 
         public override void Update(float timeBetweenFrame)
