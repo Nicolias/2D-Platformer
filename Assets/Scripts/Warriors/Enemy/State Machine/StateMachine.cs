@@ -8,7 +8,6 @@ namespace Enemy
 {
     public class StateMachine : MonoBehaviour, IUpdateable, IDisposable
     {
-        [SerializeField] private float _attackDistance;
         [SerializeField] private float _maxFollowDistance;
         
         private UpdateServise _updateServise;
@@ -16,16 +15,19 @@ namespace Enemy
         private List<BaseState> _states = new List<BaseState>();
         private BaseState _currentState;
 
+        public Enemy Enemy { get; private set; }
+
         public void Initialize(Enemy enemy, Character character, UpdateServise updateServise)
         {
             _updateServise = updateServise;
+            Enemy = enemy;
+
+            _states.Add(new RespawnState(this));
+            _states.Add(new PatrolleState(this));
+            _states.Add(new FollowState(character.transform, _maxFollowDistance, this));
+            _states.Add(new AttackState(character, this));
+
             updateServise.AddToUpdate(this);
-
-            _states.Add(new RespawnState(this, enemy.Movement, enemy));
-            _states.Add(new PatrolleState(enemy.PatrollPath, enemy.Detector, this, enemy.Movement));
-            _states.Add(new FollowState(character.transform, _maxFollowDistance, _attackDistance, this, enemy.Movement));
-            _states.Add(new AttackState(_attackDistance, character, enemy, this, enemy.Movement));
-
             enemy.TeleportToStartPoint(false);
         }
 

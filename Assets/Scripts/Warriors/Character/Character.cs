@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace CharacterSystem
@@ -21,6 +22,7 @@ namespace CharacterSystem
         public void Initialize(UpdateServise updateServise)
         {
             _detector.Detected += OnDetected;
+            _detector.Lost += OnEnemyLost;
 
             new Input(_movement, updateServise);
             _movement.Initialize(updateServise);
@@ -29,17 +31,28 @@ namespace CharacterSystem
             AttackAndHealth.Initialize(updateServise, this);
         }
 
+        private void OnDisable()
+        {
+            _detector.Detected -= OnDetected;
+            _detector.Lost -= OnEnemyLost;
+        }
+
         void IDieable.Die()
         {
             _movement.Dispose();
 
             Died?.Invoke();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         private void OnDetected(Health health)
         {
             AttackAndHealth.Attacker.StartAttack(health);
+        }
+
+        private void OnEnemyLost()
+        {
+            AttackAndHealth.Attacker.StopAttack();
         }
     }
 }

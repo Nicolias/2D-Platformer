@@ -8,6 +8,9 @@ public class AttackAndHealthFacade : MonoBehaviour
     [SerializeField] private int _damage;
     [SerializeField] private int _attackCoolDown;
 
+    [SerializeField] private float _maxAttackDistanceByXAxis;
+    [SerializeField] private float _maxAttackDistanceByYAxis;
+
     private IDieable _dieable;
 
     public Attacker Attacker { get; private set; }

@@ -2,16 +2,14 @@
 {
     public class RespawnState : BaseState
     {
-        private readonly Enemy _enemy;
 
-        public RespawnState(StateMachine stateMachine, Movement movement, Enemy enemy) : base(stateMachine, movement)
+        public RespawnState(StateMachine stateMachine) : base(stateMachine)
         {
-            _enemy = enemy;
         }
 
         public override void Enter()
         {
-            _enemy.TeleportToStartPoint();
+            StateMachine.Enemy.TeleportToStartPoint();
         }
 
         public override void Exit()

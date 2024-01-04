@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace Enemy
 {
@@ -13,6 +14,11 @@ namespace Enemy
         [SerializeField] private StateMachine _movementStateMachine;
 
         [SerializeField] private PatrollPath _patrollPath;
+
+        [SerializeField] private float _maxAttackDistanceByXAxis;
+        [SerializeField] private float _maxAttackDistanceByYAxis;
+
+        private Transform _selfTransform;
 
         [field: SerializeField] public AttackAndHealthFacade AttackAndHealth { get; private set; }
 
@@ -28,10 +34,10 @@ namespace Enemy
         {
             JumpMovementFacade jumpMovementFacade = GetComponent<JumpMovementFacade>();
             Animator animator = GetComponent<Animator>();
-            Transform selfTransform = transform;
+            _selfTransform = transform;
 
-            Movement = new Movement(selfTransform, jumpMovementFacade, updateServise);
-            MoveAnimation = new MoveAnimation(Movement, animator, selfTransform, updateServise);
+            Movement = new Movement(_selfTransform, jumpMovementFacade, updateServise);
+            MoveAnimation = new MoveAnimation(Movement, animator, _selfTransform, updateServise);
 
             jumpMovementFacade.Initialize(updateServise);
             AttackAndHealth.Initialize(updateServise, this);
@@ -44,11 +50,19 @@ namespace Enemy
             Movement.Dispose();
 
             Died?.Invoke();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
+
+        public bool CanAttack(Vector2 targetPosition)
+        {
+            return DirectionConst.GetDistance(_selfTransform.position.x, targetPosition.x) <= _maxAttackDistanceByXAxis
+                && DirectionConst.GetDistance(_selfTransform.transform.position.y, targetPosition.y) <= _maxAttackDistanceByYAxis;
         }
 
         public void TeleportToStartPoint(bool isNeedShowAnimaton = true)
         {
+            gameObject.SetActive(true);
+
             StartCoroutine(Teleport(isNeedShowAnimaton));
         }
 

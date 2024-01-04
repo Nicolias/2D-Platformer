@@ -2,31 +2,24 @@
 {
     public class PatrolleState : BaseState
     {
-        private readonly PatrollPath _patrollPath;
-        private readonly AbstractDetector _detector;
-
-        public PatrolleState(PatrollPath patrollPath, AbstractDetector detector, StateMachine stateMachine, Movement movement) : base(stateMachine, movement)
-        {
-            _patrollPath = patrollPath;
-            _detector = detector;
-        }
+        public PatrolleState(StateMachine stateMachine) : base(stateMachine){}
 
         public override void Enter()
         {
-            Movement.Follow(_patrollPath.GetNextPathPoint());
-            _detector.Detected += OnPlayerDetected;
+            StateMachine.Enemy.Movement.Follow(StateMachine.Enemy.PatrollPath.GetNextPathPoint());
+            StateMachine.Enemy.Detector.Detected += OnPlayerDetected;
         }
 
         public override void Exit()
         {
-            Movement.StopFollowing();
-            _detector.Detected -= OnPlayerDetected;
+            StateMachine.Enemy.Movement.StopFollowing();
+            StateMachine.Enemy.Detector.Detected -= OnPlayerDetected;
         }
 
         public override void Update(float timeBetweenFrame)
         {
-            if (Movement.GetDistanceByTarget() < 0.1)
-                Movement.Follow(_patrollPath.GetNextPathPoint());
+            if (StateMachine.Enemy.Movement.GetDistanceByTarget() < 0.1)
+                StateMachine.Enemy.Movement.Follow(StateMachine.Enemy.PatrollPath.GetNextPathPoint());
         }
 
         private void OnPlayerDetected(Health health)
