@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b3cc638217ce64289b815c40428ccf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 4
+  _moveSpeed: 5
   _jumpDuration: 2
   _jumpHaight: 4
 --- !u!1001 &212228422
@@ -1290,7 +1290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6892621396844697846, guid: 2ba9dffe5a73daf42aa08d5e1fac9393, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2171,7 +2171,7 @@ Transform:
   m_GameObject: {fileID: 1473968493}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.695131, y: 4.561583, z: 0.07421772}
+  m_LocalPosition: {x: -7.695131, y: -0.44, z: 0.07421772}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3320,6 +3320,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1647804497 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5288364384392255364, guid: 2ba9dffe5a73daf42aa08d5e1fac9393, type: 3}
+  m_PrefabInstance: {fileID: 750515573}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c12d8b237e2f743b2f44aa88f25e15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1716079905
 GameObject:
   m_ObjectHideFlags: 0
@@ -3382,7 +3393,7 @@ Transform:
   m_GameObject: {fileID: 1758327853}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.93, y: 4.561583, z: 0.07421772}
+  m_LocalPosition: {x: 6.93, y: -0.44000006, z: 0.07421772}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3866,6 +3877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemies:
   - {fileID: 1375170357}
+  - {fileID: 1647804497}
   _character: {fileID: 196129413}
   _updateServise: {fileID: 880262424}
   _moneyCollectedText: {fileID: 1236984268}
@@ -3945,6 +3957,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 223594048}
     m_Modifications:
+    - target: {fileID: 1620123883477231720, guid: 2ba9dffe5a73daf42aa08d5e1fac9393, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1620123883477231720, guid: 2ba9dffe5a73daf42aa08d5e1fac9393, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3669552679888513789, guid: 2ba9dffe5a73daf42aa08d5e1fac9393, type: 3}
       propertyPath: m_IsActive
       value: 1

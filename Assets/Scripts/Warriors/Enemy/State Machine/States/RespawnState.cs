@@ -9,7 +9,7 @@
 
         public override void Enter()
         {
-            StateMachine.Enemy.TeleportToStartPoint();
+            StateMachine.Enemy.MoveAnimation.Animator.SetTrigger(AnimatorData.Params.Teleport);
         }
 
         public override void Exit()

@@ -2,12 +2,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(JumpMovementFacade))]
+    [RequireComponent(typeof(TeleportAnimationHandler))]
+    [RequireComponent(typeof(Animator))]
     public class Enemy : MonoBehaviour, IDieable
     {
         [SerializeField] private AbstractDetector _detector;
@@ -18,7 +18,9 @@ namespace Enemy
         [SerializeField] private float _maxAttackDistanceByXAxis;
         [SerializeField] private float _maxAttackDistanceByYAxis;
 
+        private TeleportAnimationHandler _teleport;
         private Transform _selfTransform;
+        private Animator _animator;
 
         [field: SerializeField] public AttackAndHealthFacade AttackAndHealth { get; private set; }
 
@@ -33,15 +35,24 @@ namespace Enemy
         public void Initialize(Character character, UpdateServise updateServise)
         {
             JumpMovementFacade jumpMovementFacade = GetComponent<JumpMovementFacade>();
-            Animator animator = GetComponent<Animator>();
+            _teleport = GetComponent<TeleportAnimationHandler>();
+            _animator = GetComponent<Animator>();
             _selfTransform = transform;
 
+            _teleport.Showed += Respawn;
             Movement = new Movement(_selfTransform, jumpMovementFacade, updateServise);
-            MoveAnimation = new MoveAnimation(Movement, animator, _selfTransform, updateServise);
+            MoveAnimation = new MoveAnimation(Movement, _animator, _selfTransform, updateServise);
 
             jumpMovementFacade.Initialize(updateServise);
             AttackAndHealth.Initialize(updateServise, this);
             _movementStateMachine.Initialize(this, character, updateServise);
+
+            Respawn();
+        }
+
+        private void OnDisable()
+        {
+            _teleport.Showed -= Respawn;
         }
 
         void IDieable.Die()
@@ -59,21 +70,8 @@ namespace Enemy
                 && DirectionConst.GetDistance(_selfTransform.transform.position.y, targetPosition.y) <= _maxAttackDistanceByYAxis;
         }
 
-        public void TeleportToStartPoint(bool isNeedShowAnimaton = true)
+        private void Respawn()
         {
-            gameObject.SetActive(true);
-
-            StartCoroutine(Teleport(isNeedShowAnimaton));
-        }
-
-        private IEnumerator Teleport(bool isNeedShowAnimaton)
-        {
-            if(isNeedShowAnimaton)
-            {
-                MoveAnimation.PlayTeleportAnimation();
-                yield return new WaitForSeconds(1f);
-            }
-
             _patrollPath.Reset();
             Movement.Respawn(_patrollPath.GetNextPathPoint().position);
             _movementStateMachine.ChangeState<PatrolleState>();

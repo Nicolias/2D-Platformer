@@ -28,7 +28,6 @@ namespace Enemy
             _states.Add(new AttackState(character, this));
 
             updateServise.AddToUpdate(this);
-            enemy.TeleportToStartPoint(false);
         }
 
         public void Dispose()

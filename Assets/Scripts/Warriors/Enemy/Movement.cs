@@ -33,10 +33,7 @@ namespace Enemy
         void IUpdateable.Update(float timeBetweenFrame)
         {
             if (_currentTargetTransform != null)
-            {
-                Debug.Log(_currentTargetTransform.position.x - _enemyTransform.position.x);
                 _movement.Move(_currentTargetTransform.position.x - _enemyTransform.position.x, timeBetweenFrame);
-            }
             else
                 _movement.Move(0, 0);
         }
