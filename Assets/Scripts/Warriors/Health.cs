@@ -13,17 +13,25 @@ public class Health
 
     public event Action Dieing;
 
-    public void TakeDamage(int damage)
+    public void Damage(int value)
     {
-        if (damage <= 0)
+        if (value <= 0)
             throw new InvalidOperationException();
 
-        _value -= damage;
+        _value -= value;
 
         if (_value <= 0)
         {
             _value = 0;
             Dieing?.Invoke();
         }
+    }
+
+    public void Heal(int value)
+    {
+        if (value <= 0)
+            throw new InvalidOperationException();
+
+        _value += value;
     }
 }

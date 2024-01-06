@@ -14,15 +14,18 @@ public class EnteryPoint : MonoBehaviour
     [SerializeField] private TMP_Text _moneyCollectedText;
     [SerializeField] private Button _restartGameButton;
 
+    [SerializeField] private MedkitSpawner _medkitSpawner;
+
     private Wallet _wallet = new Wallet();
 
     private void Awake()
     {
         _character.Initialize(_updateServise);
+        _medkitSpawner.Initialize(_character);
+        _enemies.ForEach(enemy => enemy.Initialize(_character, _updateServise));
+
         _character.CoinCollector.Collected += OnWalletChanged;
         _character.Died += GameOver;
-
-        _enemies.ForEach(enemy => enemy.Initialize(_character, _updateServise));
 
         Time.timeScale = 1;
     }

@@ -47,7 +47,7 @@ public class Attacker : IUpdateable
             return;
         }
 
-        _damageable.TakeDamage(_damage);
+        _damageable.Damage(_damage);
         _nextAttackTime = Time.time + _attackCooldown;
 
         _selfAnimator.SetTrigger(AnimatorData.Params.Attack);

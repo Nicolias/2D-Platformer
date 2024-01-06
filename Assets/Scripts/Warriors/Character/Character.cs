@@ -12,7 +12,7 @@ namespace CharacterSystem
 
         private MoveAnimation _moveAnimation;
 
-        [field: SerializeField] public CoinCollector CoinCollector { get; private set; }
+        [field: SerializeField] public Collector CoinCollector { get; private set; }
         [field: SerializeField] public AttackAndHealthFacade AttackAndHealth { get; private set; }
 
         public MoveAnimation MoveAnimation => _moveAnimation;

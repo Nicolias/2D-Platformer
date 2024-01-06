@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 
 [RequireComponent(typeof(CapsuleCollider2D))]
-public class CoinCollector : MonoBehaviour
+public class Collector : MonoBehaviour
 {
     public event UnityAction Collected;
 
@@ -12,6 +12,11 @@ public class CoinCollector : MonoBehaviour
         {
             Collected?.Invoke();
             Destroy(money.gameObject);
+        }
+
+        if(collision.TryGetComponent(out MedkitView medkitView))
+        {
+            medkitView.PickUp();
         }
     }
 }
