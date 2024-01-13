@@ -1,5 +1,5 @@
 ﻿public interface IMoveable
 {
-    public float Direction { get; }
+    public DirectionType Direction { get; }
     public float Speed { get; }
 }

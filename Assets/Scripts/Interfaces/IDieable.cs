@@ -2,7 +2,6 @@
 
 public interface IDieable
 {
-    public MoveAnimation MoveAnimation { get; }
 
     public event UnityAction Died;
 

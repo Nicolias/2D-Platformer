@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6128143321790412949}
   - component: {fileID: 3850295660309425528}
   - component: {fileID: 8351202330720522998}
-  - component: {fileID: 785660424353978567}
   m_Layer: 6
   m_Name: Damagable
   m_TagString: Untagged
@@ -109,23 +108,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &785660424353978567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2218756940806140319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eafbeb9b5d33f564f95d6953c3fc888a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 15
-  _damage: 5
-  _attackCoolDown: 1
-  _maxAttackDistanceByXAxis: 0
-  _maxAttackDistanceByYAxis: 0
 --- !u!1 &3669552679888513789
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +200,6 @@ GameObject:
   - component: {fileID: 5288364384392255364}
   - component: {fileID: 3733432919810306880}
   - component: {fileID: 7540694124900588367}
-  - component: {fileID: 8849943866334002281}
   - component: {fileID: 538669233479571190}
   - component: {fileID: 2398950768952696397}
   - component: {fileID: 4593777892161113746}
@@ -261,10 +242,8 @@ MonoBehaviour:
   _detector: {fileID: 8385282438728012051}
   _movementStateMachine: {fileID: 3733432919810306880}
   _patrollPath: {fileID: 0}
-  _animator: {fileID: 0}
   _maxAttackDistanceByXAxis: 1.5
   _maxAttackDistanceByYAxis: 1.5
-  <AttackAndHealth>k__BackingField: {fileID: 785660424353978567}
 --- !u!114 &3733432919810306880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,21 +283,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: -0.83, y: 0.03, z: 0}
---- !u!114 &8849943866334002281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6892621396844697846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6b3cc638217ce64289b815c40428ccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveSpeed: 0.5
-  _jumpDuration: 2
-  _jumpHaight: 4
 --- !u!114 &538669233479571190
 MonoBehaviour:
   m_ObjectHideFlags: 0
