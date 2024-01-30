@@ -5,27 +5,27 @@ namespace EnemyNamespace
 {
     public class Input : AbstractInput
     {
-        private readonly MovementController _moveController;
+        private readonly Movement _movement;
         private readonly PatrollPath _patrollPath;
         private readonly Transform _selfTransform;
 
         private Transform _currentTargetTransform;
 
-        public Input(Transform transform, MovementController moveController, PatrollPath patrollPath)
+        public Input(Transform transform, Movement moveController, PatrollPath patrollPath)
         {
             if (transform == null) throw new ArgumentNullException();
             if (moveController == null) throw new ArgumentNullException();
             if (patrollPath == null) throw new ArgumentNullException();
 
             _selfTransform = transform;
-            _moveController = moveController;
+            _movement = moveController;
             _patrollPath = patrollPath;
         }
 
         public void Respawn()
         {
             _patrollPath.Reset();
-            _moveController.Teleport(_patrollPath.GetNextPathPoint().position);
+            _movement.Teleport(_patrollPath.GetNextPathPoint().position);
         }
 
         public void Follow(Transform target)
@@ -56,9 +56,9 @@ namespace EnemyNamespace
         protected override void FixedUpdate(float timeBetweenFrame)
         {
             if (_currentTargetTransform != null)
-                _moveController.Move(_currentTargetTransform.position.x - _selfTransform.position.x, timeBetweenFrame);
+                _movement.Move(_currentTargetTransform.position.x - _selfTransform.position.x, timeBetweenFrame);
             else
-                _moveController.Move(0, 0);
+                _movement.Move(0, 0);
         }
     }
 }

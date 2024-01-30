@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EnemyNamespace
 {
-    [RequireComponent(typeof(MovementController))]
+    [RequireComponent(typeof(Movement))]
     public class EnemyView : WarriarView, IDieable
     {
         [SerializeField] private Detector _detector;
@@ -13,7 +13,6 @@ namespace EnemyNamespace
 
         private CharacterView _target;
         private EnemyPresenter _behaviourPresenter;
-        private Transform _selfTransform;
 
         protected override AbstractDetector Detector => _detector;
 
@@ -34,19 +33,16 @@ namespace EnemyNamespace
             Initialize(updateServise);
         }
 
-        protected override void OnInitialized()
-        {
-            _selfTransform = transform;
-        }
-
         protected override void OnEnabled()
         {
             AnimationEventsHandler.TeleportShowed += OnRespawned;
+            UpdateServise.AddToFixedUpdate(Input);
         }
 
         protected override void OnDisabled()
         {
             AnimationEventsHandler.TeleportShowed -= OnRespawned;
+            UpdateServise.RemoveFromFixedUpdate(Input);
         }
 
         public void Respawn()
@@ -60,11 +56,11 @@ namespace EnemyNamespace
             Respawned?.Invoke();
         }
 
-        protected override AbstractInput GetMoveInput(MovementController movementController)
+        protected override AbstractInput GetMoveInput(Movement movementController)
         {
             if (movementController == null) throw new ArgumentNullException();
 
-            Input = new Input(_selfTransform, movementController, new PatrollPath(_patrollPathList));
+            Input = new Input(transform, movementController, new PatrollPath(_patrollPathList));
             return Input;
         }
 
@@ -81,7 +77,7 @@ namespace EnemyNamespace
             return _behaviourPresenter;
         }
 
-        protected override MovementController GetMovementController(CharacterController characterController)
+        protected override Movement GetMovementController(CharacterController characterController)
         {
             if (characterController == null) throw new ArgumentNullException();
 

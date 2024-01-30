@@ -8,19 +8,30 @@ namespace CharacterNamespace
         [SerializeField] private Detector _detector;
 
         private CharacterPresenter _characterPresenter;
+        private CharacterController _characterController;
 
         protected override AbstractDetector Detector => _detector;
 
         [field: SerializeField] public CharacterData Data { get; private set; }
-
-        public event Action<int> Healing;
 
         public void Heal(int value)
         {
             _characterPresenter.Heal(value);
         }
 
-        protected override AbstractInput GetMoveInput(MovementController movementController)
+        protected override void OnEnabled()
+        {
+            Died += OnDied;
+            UpdateServise.AddToUpdate(AbstractInput);
+        }
+
+        protected override void OnDisabled()
+        {
+            Died -= OnDied;
+            UpdateServise.RemoveFromUpdate(AbstractInput);
+        }
+
+        protected override AbstractInput GetMoveInput(Movement movementController)
         {
             if(movementController == null) throw new ArgumentNullException();
 
@@ -34,11 +45,19 @@ namespace CharacterNamespace
             return _characterPresenter;
         }
 
-        protected override MovementController GetMovementController(CharacterController characterController)
+        protected override Movement GetMovementController(CharacterController characterController)
         {
             if (characterController == null) throw new ArgumentNullException();
 
+            _characterController = characterController;
+
             return Data.CreateMovementController(characterController);
+        }
+
+        private void OnDied()
+        {
+            _characterController.enabled = false;
+            
         }
     }
 }

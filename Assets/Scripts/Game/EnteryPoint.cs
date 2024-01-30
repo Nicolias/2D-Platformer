@@ -29,12 +29,14 @@ public class EnteryPoint : MonoBehaviour
 
     private void OnEnable()
     {
+        _uIInitializer.Enable();
         _uIInitializer.RestartButtonClicked += RestartGame;
         _warriarsFactory.Enable();
     }
 
     private void OnDisable()
     {
+        _uIInitializer.Disable();
         _uIInitializer.RestartButtonClicked += RestartGame;
         _warriarsFactory.Disable();
     }

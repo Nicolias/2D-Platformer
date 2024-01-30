@@ -58,10 +58,13 @@ public class Attacker : IUpdateable
 
     private void Attack()
     {
-        _damageable.Damage(_damage);
-        _nextAttackTime = Time.time + _attackCooldown;
+        if (_damageable != null)
+        {
+            _damageable.Damage(_damage);
+            _nextAttackTime = Time.time + _attackCooldown;
 
-        Attacked?.Invoke();
+            Attacked?.Invoke();
+        }
     }
 
     private void OnTargetDied()

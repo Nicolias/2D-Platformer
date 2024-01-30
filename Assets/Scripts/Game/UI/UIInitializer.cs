@@ -1,13 +1,10 @@
-using CharacterNamespace;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIInitializer : MonoBehaviour
+public class UIInitializer : MonoBehaviour, IToggleable
 {
-    [SerializeField] private EnteryPoint _enteryPoint;
-
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private Button _restartGameButton;
 
@@ -18,16 +15,22 @@ public class UIInitializer : MonoBehaviour
 
     public void Initialize(Wallet wallet, IDieable character)
     {
+        if (wallet == null) throw new ArgumentNullException();
+        if (character == null) throw new ArgumentNullException();
+
         _wallet = wallet;
         _character = character;
+    }
 
-        wallet.Changed += OnWalletChanged;
-        character.Died += OnCharacterDied;
+    public void Enable()
+    {        
+        _wallet.Changed += OnWalletChanged;
+        _character.Died += OnCharacterDied;
 
         _restartGameButton.onClick.AddListener(RestartGame);
     }
 
-    private void OnDisable()
+    public void Disable()
     {
         _wallet.Changed -= OnWalletChanged;
         _character.Died -= OnCharacterDied;

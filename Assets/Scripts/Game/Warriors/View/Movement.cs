@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 
-public class MovementController : IMoveable, IFixedUpdateable
+public class Movement : IMoveable, IFixedUpdateable
 {
     private readonly Velocity _velocity;
 
     private readonly PhisicsMovement _phisicsMovement;
     private readonly Jumper _jumper;
 
-    public MovementController(CharacterController characterController, float moveSpeed, float jumpDuration, float jumpHaight)
+    public Movement(CharacterController characterController, float moveSpeed, float jumpDuration, float jumpHaight)
     {
         _velocity = new Velocity();
 
@@ -54,12 +54,12 @@ public class MovementController : IMoveable, IFixedUpdateable
             _speed = speed;
         }
 
-        public void Move(float direction, float frameDeltaTime)
+        public void Move(float directionX, float frameDeltaTime)
         {
-            if (direction < DirectionConst.Left && direction > DirectionConst.Right)
+            if (directionX < DirectionConst.Left && directionX > DirectionConst.Right)
                 throw new ArgumentOutOfRangeException($"Ќаправление должно быть в пределах от {DirectionConst.Left} до {DirectionConst.Right}");
 
-            _velocity.X = direction * _speed;
+            _velocity.X = directionX * _speed;
             _characterController.Move(new Vector2(_velocity.X * frameDeltaTime, _velocity.Y * frameDeltaTime));
         }
 

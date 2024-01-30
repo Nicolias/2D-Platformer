@@ -6,11 +6,11 @@ using UnityEngine;
 [RequireComponent(typeof(AnimationEventsHandler))]
 public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
 {
-    private MovementController _movement;
+    private Movement _movement;
     private WarriarPresenter _warriarPresenter;
-    private AbstractInput _input;
     private DetecterHandler _detecterHandler;
 
+    protected AbstractInput AbstractInput { get; private set; }
     protected AnimationEventsHandler AnimationEventsHandler { get; private set; }
     protected WarriarAnimationHandler AnimationHandler { get; private set; }
     protected UpdateServise UpdateServise { get; private set; }
@@ -27,12 +27,11 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
 
         UpdateServise = updateServise;
 
-        _movement = GetMovementController(GetComponent<CharacterController>());
-        _warriarPresenter = GetPresenter();
-        _input = GetMoveInput(_movement);
-
         AnimationEventsHandler = GetComponent<AnimationEventsHandler>();
+        _movement = GetMovementController(GetComponent<CharacterController>());
         AnimationHandler = new WarriarAnimationHandler(_movement, GetComponent<Animator>(), transform, updateServise);
+        AbstractInput = GetMoveInput(_movement);
+        _warriarPresenter = GetPresenter();
         _detecterHandler = new DetecterHandler(_warriarPresenter, Detector);
 
         OnInitialized();
@@ -43,7 +42,6 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
         AnimationEventsHandler.DeadShowed += OnDead;
 
         UpdateServise.AddToFixedUpdate(_movement);
-        UpdateServise.AddToFixedUpdate(_input);
 
         _detecterHandler.Enable();
         _warriarPresenter.Enable();
@@ -56,7 +54,6 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
         AnimationEventsHandler.DeadShowed -= OnDead;
 
         UpdateServise.RemoveFromFixedUpdate(_movement);
-        UpdateServise.RemoveFromFixedUpdate(_input);
 
         _detecterHandler.Disable();
         _warriarPresenter.Disable();
@@ -87,8 +84,8 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
     protected virtual void OnDisabled(){}
 
     protected abstract WarriarPresenter GetPresenter();
-    protected abstract MovementController GetMovementController(CharacterController characterController);
-    protected abstract AbstractInput GetMoveInput(MovementController movementController);
+    protected abstract Movement GetMovementController(CharacterController characterController);
+    protected abstract AbstractInput GetMoveInput(Movement movementController);
 
     private void OnDead()
     {

@@ -826,7 +826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32cd8e8c48e06d346bd679ed57437f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enteryPoint: {fileID: 0}
   _scoreText: {fileID: 1236984268}
   _restartGameButton: {fileID: 1468273386}
 --- !u!4 &514923654

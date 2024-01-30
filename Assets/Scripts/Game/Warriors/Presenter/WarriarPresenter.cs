@@ -13,7 +13,6 @@ public abstract class WarriarPresenter : IToggleable
         if (model == null) throw new ArgumentNullException();
         if (attacker == null) throw new ArgumentNullException();
 
-
         _view = view;
         _model = model;
         Attacker = attacker;
@@ -21,6 +20,8 @@ public abstract class WarriarPresenter : IToggleable
 
     public void Enable()
     {
+        _model.Enable();
+
         Attacker.Attacked += OnAttacked;
         _model.Died += OnDied;
 
@@ -29,6 +30,8 @@ public abstract class WarriarPresenter : IToggleable
 
     public void Disable()
     {
+        _model.Disable();
+
         Attacker.Attacked -= OnAttacked;
         _model.Died -= OnDied;
         Attacker.StopAttack();
