@@ -1,5 +1,4 @@
-﻿using Character;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class MedkitSpawner : MonoBehaviour
@@ -11,12 +10,12 @@ public class MedkitSpawner : MonoBehaviour
 
     private MedkitView _currentMedkit;
 
-    public void Initialize(CharacterView character)
+    public void Initialize(IHealabel character)
     {
         for (int i = 0; i < _spawnPositons.Count; i++)
         {
             MedkitView newMedkit = Instantiate(_medkitPrefab, _spawnPositons[i]);
-            newMedkit.Initialize(character.Model.Health);
+            newMedkit.Initialize(character);
             newMedkit.gameObject.SetActive(false);
             _medkitViews.Add(newMedkit);
         }

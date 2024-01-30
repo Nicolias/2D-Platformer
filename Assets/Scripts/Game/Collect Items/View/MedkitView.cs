@@ -8,7 +8,7 @@ public class MedkitView : AbstractCollectItemView
 
     protected override ICollectableItem CollectableItem => _model;
 
-    public void Initialize(Health health)
+    public void Initialize(IHealabel health)
     {
         _model = new Medkit(health, _healValue);
     }

@@ -1,4 +1,4 @@
-﻿using Character;
+﻿using CharacterNamespace;
 using System;
 using UnityEngine;
 

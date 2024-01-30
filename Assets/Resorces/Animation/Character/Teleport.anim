@@ -161,7 +161,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1
-    functionName: OnAnimationShowed
+    functionName: OnTeleportAnimationShowed
     data: 
     objectReferenceParameter: {fileID: 6892621396844697846, guid: 2ba9dffe5a73daf42aa08d5e1fac9393, type: 3}
     floatParameter: 0

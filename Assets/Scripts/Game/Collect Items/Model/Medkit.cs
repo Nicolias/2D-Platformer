@@ -1,9 +1,9 @@
 ﻿public class Medkit : ICollectableItem
 {
-    private readonly Health _health;
+    private readonly IHealabel _health;
     private readonly int _healValue;
 
-    public Medkit(Health health, int healValue)
+    public Medkit(IHealabel health, int healValue)
     {
         _health = health;
         _healValue = healValue;

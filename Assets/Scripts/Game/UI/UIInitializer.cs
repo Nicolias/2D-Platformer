@@ -1,4 +1,4 @@
-using Character;
+using CharacterNamespace;
 using System;
 using TMPro;
 using UnityEngine;
@@ -12,17 +12,17 @@ public class UIInitializer : MonoBehaviour
     [SerializeField] private Button _restartGameButton;
 
     private Wallet _wallet;
-    private CharacterView _character;
+    private IDieable _character;
 
     public event Action RestartButtonClicked;
 
-    public void Initialize(Wallet wallet, CharacterView character)
+    public void Initialize(Wallet wallet, IDieable character)
     {
         _wallet = wallet;
         _character = character;
 
         wallet.Changed += OnWalletChanged;
-        //character.Died += OnCharacterDied;
+        character.Died += OnCharacterDied;
 
         _restartGameButton.onClick.AddListener(RestartGame);
     }
@@ -30,7 +30,7 @@ public class UIInitializer : MonoBehaviour
     private void OnDisable()
     {
         _wallet.Changed -= OnWalletChanged;
-        //_character.Died -= OnCharacterDied;
+        _character.Died -= OnCharacterDied;
 
         _restartGameButton.onClick.RemoveListener(RestartGame);
     }

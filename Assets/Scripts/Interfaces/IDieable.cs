@@ -1,9 +1,6 @@
-﻿using UnityEngine.Events;
+﻿using System;
 
 public interface IDieable
 {
-
-    public event UnityAction Died;
-
-    public void Die();
+    public event Action Died;
 }
