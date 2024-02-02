@@ -50,12 +50,6 @@ namespace EnemyNamespace
             AnimationHandler.Animator.SetTrigger(AnimatorData.Params.Teleport);
         }
 
-        private void OnRespawned()
-        {
-            Input.Respawn();
-            Respawned?.Invoke();
-        }
-
         protected override AbstractInput GetMoveInput(Movement movementController)
         {
             if (movementController == null) throw new ArgumentNullException();
@@ -82,6 +76,12 @@ namespace EnemyNamespace
             if (characterController == null) throw new ArgumentNullException();
 
             return Data.CreateMovementController(characterController);
+        }
+
+        private void OnRespawned()
+        {
+            Input.Respawn();
+            Respawned?.Invoke();
         }
     }
 }

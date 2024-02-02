@@ -2,7 +2,7 @@
 {
     public class RespawnState : BaseState
     {
-        private EnemyView _enemyView;
+        private readonly EnemyView _enemyView;
 
         public RespawnState(EnemyPresenter stateMachine, EnemyView enemyView) : base(stateMachine)
         {
@@ -18,10 +18,6 @@
         public override void Exit()
         {
             _enemyView.Respawned -= OnRespawnded;
-        }
-
-        public override void Update(float timeBetweenFrame)
-        {
         }
 
         private void OnRespawnded()

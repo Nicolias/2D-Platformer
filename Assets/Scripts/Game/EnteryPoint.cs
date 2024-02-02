@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class EnteryPoint : MonoBehaviour
 {
-    [SerializeField] private UIInitializer _uIInitializer;
+    [SerializeField] private UIInitializer _uiInitializer;
     [SerializeField] private WarriarsFactory _warriarsFactory;
     [SerializeField] private UpdateServiseView _updateServiseView;
 
@@ -21,7 +21,7 @@ public class EnteryPoint : MonoBehaviour
         _warriarsFactory.Initialize(_updateServiseView.UpdateServise);
         CharacterView characterView = _warriarsFactory.CharacterView;
 
-        _uIInitializer.Initialize(_wallet, characterView);
+        _uiInitializer.Initialize(_wallet, characterView);
         _medkitSpawner.Initialize(characterView);
         _coins.ForEach(coin => coin.Initialize(_wallet));
 
@@ -29,15 +29,15 @@ public class EnteryPoint : MonoBehaviour
 
     private void OnEnable()
     {
-        _uIInitializer.Enable();
-        _uIInitializer.RestartButtonClicked += RestartGame;
+        _uiInitializer.Enable();
+        _uiInitializer.RestartButtonClicked += RestartGame;
         _warriarsFactory.Enable();
     }
 
     private void OnDisable()
     {
-        _uIInitializer.Disable();
-        _uIInitializer.RestartButtonClicked += RestartGame;
+        _uiInitializer.Disable();
+        _uiInitializer.RestartButtonClicked += RestartGame;
         _warriarsFactory.Disable();
     }
 

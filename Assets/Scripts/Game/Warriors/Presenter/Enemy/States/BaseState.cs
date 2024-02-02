@@ -13,7 +13,7 @@
 
         public abstract void Exit();
 
-        public abstract void Update(float timeBetweenFrame);
+        public virtual void Update(float timeBetweenFrame) { }
 
         public virtual void PlayerDetected(IDamagable damagable) { }
 
