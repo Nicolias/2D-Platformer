@@ -1,19 +1,24 @@
 ﻿using System;
+using UnityEngine;
 
-public class Health
+public class Health : IHealthChangeable
 {
-    private int _value;
+    private float _value;
 
-    public Health(int value)
+    public Health(float maxHealth)
     {
-        if (value <= 0)
+        if (maxHealth <= 0)
             throw new ArgumentOutOfRangeException();
 
-        _value = value;
+        _value = maxHealth;
+        MaxValue = maxHealth;
     }
 
-    public int Value => _value;
+    public float Value => _value;
 
+    public float MaxValue { get; }
+
+    public event Action<float> Changed;
     public event Action Over;
 
     public void Damage(int value)
@@ -23,11 +28,10 @@ public class Health
 
         _value -= value;
 
-        if (_value <= 0)
-        {
-            _value = 0;
+        OnHealthChanged();
+
+        if (_value == 0)
             Over?.Invoke();
-        }
     }
 
     public void Heal(int value)
@@ -36,5 +40,14 @@ public class Health
             throw new ArgumentOutOfRangeException();
 
         _value += value;
+
+        OnHealthChanged();
+    }
+
+    private void OnHealthChanged()
+    {
+        _value = Mathf.Clamp(_value, 0, MaxValue);
+
+        Changed?.Invoke(_value);
     }
 }

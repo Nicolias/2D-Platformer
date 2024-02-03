@@ -4,30 +4,43 @@ namespace CharacterNamespace
 {
     public class CharacterPresenter : WarriarPresenter
     {
+        private readonly CharacterData _data;
+
         private CharacterModel _model;
 
         public CharacterPresenter
         (
             CharacterView view,
-            CharacterModel characterModel,
-            WarriarData warriarData,
+            CharacterData data,
             UpdateServise updateServise
         ) :
         base
         (
             view,
-            characterModel,
-            warriarData.CreateAttacker(updateServise)
+            data.CreateAttacker(updateServise)
         )
         {
-            if (characterModel == null) throw new ArgumentNullException();
+            if (data == null)
+                throw new ArgumentNullException();
 
-            _model = characterModel;
+            _data = data;
         }
+
+        public override IHealthChangeable HealthChangeable { get; protected set; }
 
         public void Heal(int value)
         {
             _model.Heal(value);
+        }
+
+        protected override WarriarModel CreateModel()
+        {
+            Health health = _data.CreateHealth();
+
+            _model = new CharacterModel(health);
+            HealthChangeable = health;
+
+            return _model;
         }
 
         protected override void OnTargetDetected(IDamagable damagable)

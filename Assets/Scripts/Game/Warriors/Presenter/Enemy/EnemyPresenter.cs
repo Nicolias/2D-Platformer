@@ -11,13 +11,16 @@ namespace EnemyNamespace
         private readonly List<BaseState> _states = new List<BaseState>();
 
         private readonly EnemyView _view;
+        private readonly EnemyData _data;
         private readonly EnemyConfig _config;
         private readonly UpdateServise _updateServise;
 
         private BaseState _currentState;
 
+        public override IHealthChangeable HealthChangeable { get; protected set; }
+
         public EnemyPresenter(EnemyView view, EnemyData data, UpdateServise updateServise, CharacterView target) : 
-            base(view, new EnemyModel(data.CreateHealth()), data.CreateAttacker(updateServise))
+            base(view, data.CreateAttacker(updateServise))
         {
             if (view == null) throw new ArgumentNullException();
             if (data == null) throw new ArgumentNullException();
@@ -25,6 +28,7 @@ namespace EnemyNamespace
             if (target == null) throw new ArgumentNullException();
 
             _view = view;
+            _data = data;
             _config = data.CreateConfig();
             _updateServise = updateServise;
 
@@ -88,6 +92,14 @@ namespace EnemyNamespace
         protected override void OnTargetLost()
         {
             _currentState.PlayerLost();
+        }
+
+        protected override WarriarModel CreateModel()
+        {
+            Health health = _data.CreateHealth();
+            HealthChangeable = health;
+
+            return new EnemyModel(health);
         }
     }
 }

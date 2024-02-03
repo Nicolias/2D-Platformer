@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HealthView;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -6,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(AnimationEventsHandler))]
 public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
 {
+    [SerializeField] private HealthViewSlider _healthView;
+
     private Movement _movement;
     private WarriarPresenter _warriarPresenter;
     private DetecterHandler _detecterHandler;
@@ -45,6 +48,7 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
 
         _detecterHandler.Enable();
         _warriarPresenter.Enable();
+        _healthView.Initialize(_warriarPresenter.HealthChangeable);
 
         OnEnabled();
     }

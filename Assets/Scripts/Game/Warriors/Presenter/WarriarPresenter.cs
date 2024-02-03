@@ -2,24 +2,25 @@
 
 public abstract class WarriarPresenter : IToggleable
 {
-    private readonly WarriarModel _model;
+    private WarriarModel _model;
     private readonly WarriarView _view;
 
     protected Attacker Attacker { get; }
 
-    public WarriarPresenter(WarriarView view, WarriarModel model, Attacker attacker)
+    public WarriarPresenter(WarriarView view, Attacker attacker)
     {
         if (view == null) throw new ArgumentNullException();
-        if (model == null) throw new ArgumentNullException();
         if (attacker == null) throw new ArgumentNullException();
 
         _view = view;
-        _model = model;
         Attacker = attacker;
     }
 
+    public abstract IHealthChangeable HealthChangeable { get; protected set; }
+
     public void Enable()
     {
+        _model = CreateModel();
         _model.Enable();
 
         Attacker.Attacked += OnAttacked;
@@ -59,6 +60,8 @@ public abstract class WarriarPresenter : IToggleable
     {
         _model.Damage(value);
     }
+
+    protected abstract WarriarModel CreateModel();
 
     protected abstract void OnTargetDetected(IDamagable damagable);
 

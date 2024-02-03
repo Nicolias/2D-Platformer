@@ -40,7 +40,7 @@ namespace CharacterNamespace
 
         protected override WarriarPresenter GetPresenter()
         {
-            _characterPresenter = new CharacterPresenter(this, new CharacterModel(Data.CreateHealth()), Data, UpdateServise);
+            _characterPresenter = new CharacterPresenter(this, Data, UpdateServise);
 
             return _characterPresenter;
         }
