@@ -5,6 +5,7 @@ namespace CharacterNamespace
     public class CharacterPresenter : WarriarPresenter
     {
         private readonly CharacterData _data;
+        private readonly Health _health;
 
         private CharacterModel _model;
 
@@ -12,6 +13,7 @@ namespace CharacterNamespace
         (
             CharacterView view,
             CharacterData data,
+            Health health,
             UpdateServise updateServise
         ) :
         base
@@ -23,6 +25,11 @@ namespace CharacterNamespace
             if (data == null)
                 throw new ArgumentNullException();
 
+            if (health == null)
+                throw new ArgumentNullException();
+
+            HealthChangeable = health;
+            _health = health;
             _data = data;
         }
 
@@ -35,10 +42,7 @@ namespace CharacterNamespace
 
         protected override WarriarModel CreateModel()
         {
-            Health health = _data.CreateHealth();
-
-            _model = new CharacterModel(health);
-            HealthChangeable = health;
+            _model = new CharacterModel(_health);
 
             return _model;
         }

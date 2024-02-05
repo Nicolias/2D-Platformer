@@ -12,13 +12,17 @@ namespace HealthView
         {
             _health = health;
 
-            _health.Changed += OnHealthChanged;
 
             OnInitialized();
             OnHealthChanged(MaxHealth);
         }
 
-        private void OnDestroy()
+        public void Enable()
+        {
+           _health.Changed += OnHealthChanged;
+        }
+
+        public void Disable()
         {
             _health.Changed -= OnHealthChanged;
         }

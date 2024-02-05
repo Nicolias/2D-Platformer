@@ -16,7 +16,7 @@ MonoBehaviour:
   _jumpDuration: 2
   _jumpHaight: 2
   _health: 100
-  _damage: 5
+  _damage: 10
   _atackCoolDown: 2
   _maxAttackDistanceByXAxis: 1.5
   _maxAttackDistanceByYAxis: 0.5

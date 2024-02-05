@@ -12,6 +12,7 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
     private Movement _movement;
     private WarriarPresenter _warriarPresenter;
     private DetecterHandler _detecterHandler;
+    private Transform _transform;
 
     protected AbstractInput AbstractInput { get; private set; }
     protected AnimationEventsHandler AnimationEventsHandler { get; private set; }
@@ -20,16 +21,23 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
 
     protected abstract AbstractDetector Detector { get; }
 
+    public Vector2 Position => _transform.position;
+
     public event Action Died;
+
+    void IDamagable.Damage(int value)
+    {
+        _warriarPresenter.Damage(value);
+    }
 
     public void Initialize(UpdateServise updateServise)
     {
         if (updateServise == null) throw new ArgumentNullException();
 
         gameObject.SetActive(true);
+        _transform = transform;
 
         UpdateServise = updateServise;
-
         AnimationEventsHandler = GetComponent<AnimationEventsHandler>();
         _movement = GetMovementController(GetComponent<CharacterController>());
         AnimationHandler = new WarriarAnimationHandler(_movement, GetComponent<Animator>(), transform, updateServise);
@@ -40,7 +48,7 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
         OnInitialized();
     }
 
-    void IToggleable.Enable()
+    public void Enable()
     {
         AnimationEventsHandler.DeadShowed += OnDead;
 
@@ -49,11 +57,12 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
         _detecterHandler.Enable();
         _warriarPresenter.Enable();
         _healthView.Initialize(_warriarPresenter.HealthChangeable);
+        _healthView.Enable();
 
         OnEnabled();
     }
 
-    void IToggleable.Disable()
+    public void Disable()
     {
         AnimationEventsHandler.DeadShowed -= OnDead;
 
@@ -61,13 +70,9 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
 
         _detecterHandler.Disable();
         _warriarPresenter.Disable();
+        _healthView.Disable();
 
         OnDisabled();
-    }
-
-    void IDamagable.Damage(int value)
-    {
-        _warriarPresenter.Damage(value);
     }
 
     public void ShowAttackAnimation()
@@ -93,6 +98,7 @@ public abstract class WarriarView : MonoBehaviour, IDamagable, IToggleable
 
     private void OnDead()
     {
+        Disable();
         gameObject.SetActive(false);
     }
 }

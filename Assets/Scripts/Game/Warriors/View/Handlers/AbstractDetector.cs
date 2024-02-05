@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class AbstractDetector : MonoBehaviour
 {
     public event Action<IDamagable> Detected;
-    public event Action Lost;
+    public event Action<IDamagable> Lost;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -16,7 +16,7 @@ public abstract class AbstractDetector : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (TryDetecteHealth(collision, out IDamagable damagable))
-            Lost?.Invoke();
+            Lost?.Invoke(damagable);
     }
 
     protected abstract bool TryDetecteHealth(Collider2D collision, out IDamagable damagable);

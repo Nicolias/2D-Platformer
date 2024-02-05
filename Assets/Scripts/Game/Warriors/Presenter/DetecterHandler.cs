@@ -31,7 +31,7 @@ public class DetecterHandler
         _presenter.Detected(damagable);
     }
 
-    private void OnLost()
+    private void OnLost(IDamagable damagable)
     {
         _presenter.Lost();
     }
